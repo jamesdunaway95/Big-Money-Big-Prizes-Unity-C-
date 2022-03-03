@@ -1,55 +1,44 @@
 using UnityEngine;
 
-public class InputManager : MonoBehaviour
+namespace DunawayDevelopment.BigMoney
 {
-    private static InputManager _instance;
-
-    public static InputManager Instance
+    public class InputManager : MonoBehaviour
     {
-        get
-        {
-            return _instance;
-        }
-    }
+        private PlayerControls playerControls;
 
-    private PlayerControls playerControls;
+        private void OnEnable()
+        {
+            if (playerControls == null)
+            {
+                playerControls = new PlayerControls();
+            }
 
-    private void Awake()
-    {
-        if (_instance != null && _instance != this)
-        {
-            Destroy(this.gameObject);
-        } 
-        else
-        {
-            _instance = this;
+            playerControls.Enable();
         }
 
-        playerControls = new PlayerControls();
-    }
+        public Vector2 GetMovementInput()
+        {
+            return playerControls.Gameplay.Movement.ReadValue<Vector2>();
+        }
 
-    private void OnEnable()
-    {
-        playerControls.Enable();
-    }
+        public Vector2 GetLookInput()
+        {
+            return playerControls.Gameplay.Look.ReadValue<Vector2>();
+        }
 
-    public Vector2 GetMovementInput()
-    {
-        return playerControls.Gameplay.Movement.ReadValue<Vector2>();
-    }
+        public bool GetJumpInput()
+        {
+            return playerControls.Gameplay.Jump.triggered;
+        }
 
-    public Vector2 GetLookInput()
-    {
-        return playerControls.Gameplay.Look.ReadValue<Vector2>();
-    }
+        public bool GetSprintInput()
+        {
+            return playerControls.Gameplay.Sprint.ReadValue<float>() > 0.05f ? true : false;
+        }
 
-    public bool GetJumpInput()
-    {
-        return playerControls.Gameplay.Jump.triggered;
-    }
-
-    private void OnDisable()
-    {
-        playerControls.Disable();
+        private void OnDisable()
+        {
+            playerControls.Disable();
+        }
     }
 }
