@@ -4,6 +4,7 @@ using UnityEngine;
 namespace NoStackDev.BigMoney
 {
     [RequireComponent(typeof(Rigidbody))]
+    [RequireComponent(typeof(InputManager))]
     public class PlayerMovement : MonoBehaviour
     {
         // Components
