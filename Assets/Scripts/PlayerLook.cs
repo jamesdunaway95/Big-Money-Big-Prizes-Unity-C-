@@ -5,12 +5,12 @@ namespace NoStackDev.BigMoney
 {
     public class PlayerLook : MonoBehaviour
     {
-        // Components
         private InputManager input;
-        private Camera normalCamera;
 
-        // Variables
+        [SerializeField] private Transform orientation;
+
         [Header("Camera")]
+        [SerializeField] private Transform normalCamera;
         [SerializeField] private float xSensitivity = 10f;
         [SerializeField] private float ySensitivity = 10f;
         [SerializeField] private bool invertY = false;
@@ -29,7 +29,6 @@ namespace NoStackDev.BigMoney
         private void Awake()
         {
             input = GetComponent<InputManager>();
-            normalCamera = GetComponentInChildren<Camera>();
         }
 
         private void Start()
@@ -40,14 +39,6 @@ namespace NoStackDev.BigMoney
 
         private void Update()
         {
-            HandleInput();
-
-            normalCamera.transform.localRotation = Quaternion.Euler(xRotation, 0, 0);
-            transform.rotation = Quaternion.Euler(0, yRotation, 0);
-        }
-
-        private void HandleInput()
-        {
             xLookInput = input.lookInput.x;
             yLookInput = input.lookInput.y;
 
@@ -56,6 +47,9 @@ namespace NoStackDev.BigMoney
             xRotation += yLookInput * ySensitivity * multiplier;
 
             xRotation = Mathf.Clamp(xRotation, maxLookAngle, minLookAngle);
+
+            normalCamera.rotation = Quaternion.Euler(xRotation, yRotation, 0);
+            orientation.rotation = Quaternion.Euler(0, yRotation, 0);
         }
     }
 }

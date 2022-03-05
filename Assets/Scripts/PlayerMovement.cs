@@ -11,6 +11,7 @@ namespace NoStackDev.BigMoney
         private InputManager input;
 
         [Header("Movement")]
+        [SerializeField] private Transform orientation;
         [SerializeField] private float moveSpeed = 6f;
         [SerializeField] private float moveMultiplier = 10f;
         [SerializeField] private float airMultiplier = 10f;
@@ -57,7 +58,7 @@ namespace NoStackDev.BigMoney
             horizontalMovement = input.movementInput.x;
             verticalMovement = input.movementInput.y;
 
-            moveDirection = transform.forward * verticalMovement + transform.right * horizontalMovement;
+            moveDirection = orientation.forward * verticalMovement + orientation.right * horizontalMovement;
         }
 
         private void HandleDrag()
