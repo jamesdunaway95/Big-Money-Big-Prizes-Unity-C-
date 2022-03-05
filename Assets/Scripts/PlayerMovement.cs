@@ -7,78 +7,97 @@ namespace NoStackDev.BigMoney
     [RequireComponent(typeof(InputManager))]
     public class PlayerMovement : MonoBehaviour
     {
-        // Components
         private Rigidbody rb;
-        private InputManager inputManager;
+        private InputManager input;
 
-        // Variables
         [Header("Movement")]
-        [SerializeField] private float moveSpeed = 7f;
-        [SerializeField] private float sprintModifier = 1.7f;
+        [SerializeField] private float moveSpeed = 6f;
+        [SerializeField] private float moveMultiplier = 10f;
+        [SerializeField] private float airMultiplier = 10f;
+        [SerializeField] private float jumpForce = 5f;
 
-        [Header("Ground Check")]
-        [Tooltip("This should be an empty gameObject placed around the player's feet.")]
-        [SerializeField] private Transform groundCheck;
-        [SerializeField] private float groundDistance = 0.4f;
-        [SerializeField] private LayerMask groundMask;
+        [Header("Ground Detection")]
+        [SerializeField] private float playerHeight = 2f;
         [SerializeField] private bool isGrounded;
 
-        // Hidden Variables
-        private float targetSpeed;
-        private Vector3 direction = Vector3.zero;
+        [Header("Physics")]
+        [SerializeField] private float groundDrag = 6f;
+        [SerializeField] private float airDrag = 1f;
+
+        private float horizontalMovement;
+        private float verticalMovement;
+
+        private Vector3 moveDirection;
 
         private void Awake()
         {
             rb = GetComponent<Rigidbody>();
-            inputManager = GetComponent<InputManager>();
+            input = GetComponent<InputManager>();
         }
 
-        // TODO: May look into a better method, seems messy to get input from input class then send it where it needs to go.
-        // Input should be read in update
+        private void Start()
+        {
+            rb.freezeRotation = true;
+        }
+
         private void Update()
         {
-            float _x = inputManager.movementInput.x;
-            float _z = inputManager.movementInput.y;
-            direction = new Vector3(_x, 0f, _z);
-
-            HandleSpeed(_z);
-        }
-
-        // Rigidbodies and physics should be updated in Fixed Update
-        void FixedUpdate()
-        {
-            HandleMovement();
             HandleGroundDetection();
-            HandleJump();
+            HandleInput();
+            HandleDrag();
+
+            if (input.jumpInput && isGrounded)
+            {
+                HandleJump();
+            }
         }
-        private void HandleMovement()
+
+        private void HandleInput()
         {
-            Vector3 _targetVelocity = direction.normalized * targetSpeed * Time.fixedDeltaTime;
-            _targetVelocity.y = rb.velocity.y;
-            rb.MovePosition(transform.position + transform.TransformDirection(_targetVelocity));
+            horizontalMovement = input.movementInput.x;
+            verticalMovement = input.movementInput.y;
+
+            moveDirection = transform.forward * verticalMovement + transform.right * horizontalMovement;
+        }
+
+        private void HandleDrag()
+        {
+            if (isGrounded) 
+            {
+                rb.drag = groundDrag;
+            }
+            else
+            {
+                rb.drag = airDrag;
+            }
+
         }
 
         private void HandleGroundDetection()
         {
-            isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
+            isGrounded = Physics.Raycast(transform.position, Vector3.down, playerHeight * 0.5f + 0.1f);
         }
 
-        // FIXME: Jump feels way to quick, hard to adjust using this method. Will look into other rigidbody methods or changing unities default gravity value.
         private void HandleJump()
         {
-            if (inputManager.jumpInput && isGrounded)
-            {
-                rb.AddForce(new Vector3(0, 100, 0), ForceMode.Impulse);
-            }
+            rb.AddForce(transform.up * jumpForce, ForceMode.Impulse);
         }
 
-        private void HandleSpeed(float zMove)
-        {
-            targetSpeed = moveSpeed;
 
-            if (inputManager.sprintInput && zMove > 0)
+        private void FixedUpdate()
+        {
+            HandleMovement();
+        }
+
+        private void HandleMovement()
+        {
+            if (isGrounded)
             {
-                targetSpeed *= sprintModifier;
+                rb.AddForce(moveDirection.normalized * moveSpeed * moveMultiplier, ForceMode.Acceleration);
+            }
+            else
+            {
+                rb.AddForce(moveDirection.normalized * moveSpeed * airMultiplier, ForceMode.Acceleration);
             }
         }
     }
