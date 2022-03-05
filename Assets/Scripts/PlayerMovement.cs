@@ -18,8 +18,11 @@ namespace NoStackDev.BigMoney
         [SerializeField] private float jumpForce = 5f;
 
         [Header("Ground Detection")]
+        [SerializeField] private LayerMask groundLayer;
         [SerializeField] private float playerHeight = 2f;
+        [SerializeField] private float groundDetectionDistance = 0.4f;
         [SerializeField] private bool isGrounded;
+        private RaycastHit slopeHit;
 
         [Header("Physics")]
         [SerializeField] private float groundDrag = 6f;
@@ -29,6 +32,24 @@ namespace NoStackDev.BigMoney
         private float verticalMovement;
 
         private Vector3 moveDirection;
+        private Vector3 slopeMoveDirection;
+
+        private bool OnSlope()
+        {
+            if (Physics.Raycast(transform.position, Vector3.down, out slopeHit, playerHeight * 0.5f + 0.5f))
+            {
+                if (slopeHit.normal != Vector3.up)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+
+            return false;
+        }
 
         private void Awake()
         {
@@ -51,6 +72,8 @@ namespace NoStackDev.BigMoney
             {
                 HandleJump();
             }
+
+            slopeMoveDirection = Vector3.ProjectOnPlane(moveDirection, slopeHit.normal);
         }
 
         private void HandleInput()
@@ -71,12 +94,11 @@ namespace NoStackDev.BigMoney
             {
                 rb.drag = airDrag;
             }
-
         }
 
         private void HandleGroundDetection()
         {
-            isGrounded = Physics.Raycast(transform.position, Vector3.down, playerHeight * 0.5f + 0.1f);
+            isGrounded = Physics.CheckSphere(transform.position - new Vector3(0, 1, 0), groundDetectionDistance, groundLayer);
         }
 
         private void HandleJump()
@@ -92,9 +114,13 @@ namespace NoStackDev.BigMoney
 
         private void HandleMovement()
         {
-            if (isGrounded)
+            if (isGrounded && !OnSlope())
             {
                 rb.AddForce(moveDirection.normalized * moveSpeed * moveMultiplier, ForceMode.Acceleration);
+            }
+            else if (isGrounded && OnSlope())
+            {
+                rb.AddForce(slopeMoveDirection.normalized * moveSpeed * moveMultiplier, ForceMode.Acceleration);
             }
             else
             {
