@@ -5,10 +5,12 @@ namespace NoStackDev.BigMoney
 {
     [RequireComponent(typeof(Rigidbody))]
     [RequireComponent(typeof(InputManager))]
+    [RequireComponent(typeof(GroundDetection))]
     public class PlayerMovement : MonoBehaviour
     {
         private Rigidbody rb;
         private InputManager input;
+        private GroundDetection groundDetection;
 
         [Header("Movement")]
         [SerializeField] private Transform orientation;
@@ -16,13 +18,6 @@ namespace NoStackDev.BigMoney
         [SerializeField] private float moveMultiplier = 10f;
         [SerializeField] private float airMultiplier = 10f;
         [SerializeField] private float jumpForce = 5f;
-
-        [Header("Ground Detection")]
-        [SerializeField] private LayerMask groundLayer;
-        [SerializeField] private float playerHeight = 2f;
-        [SerializeField] private float groundDetectionDistance = 0.4f;
-        [SerializeField] private bool isGrounded;
-        private RaycastHit slopeHit;
 
         [Header("Physics")]
         [SerializeField] private float groundDrag = 6f;
@@ -34,27 +29,11 @@ namespace NoStackDev.BigMoney
         private Vector3 moveDirection;
         private Vector3 slopeMoveDirection;
 
-        private bool OnSlope()
-        {
-            if (Physics.Raycast(transform.position, Vector3.down, out slopeHit, playerHeight * 0.5f + 0.5f))
-            {
-                if (slopeHit.normal != Vector3.up)
-                {
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
-            }
-
-            return false;
-        }
-
         private void Awake()
         {
             rb = GetComponent<Rigidbody>();
             input = GetComponent<InputManager>();
+            groundDetection = GetComponent<GroundDetection>();
         }
 
         private void Start()
@@ -64,16 +43,15 @@ namespace NoStackDev.BigMoney
 
         private void Update()
         {
-            HandleGroundDetection();
             HandleInput();
             HandleDrag();
 
-            if (input.jumpInput && isGrounded)
+            if (input.jumpInput && groundDetection.isGrounded)
             {
                 HandleJump();
             }
 
-            slopeMoveDirection = Vector3.ProjectOnPlane(moveDirection, slopeHit.normal);
+            slopeMoveDirection = Vector3.ProjectOnPlane(moveDirection, groundDetection.SlopeHit().normal);
         }
 
         private void HandleInput()
@@ -86,7 +64,7 @@ namespace NoStackDev.BigMoney
 
         private void HandleDrag()
         {
-            if (isGrounded) 
+            if (groundDetection.isGrounded) 
             {
                 rb.drag = groundDrag;
             }
@@ -94,11 +72,6 @@ namespace NoStackDev.BigMoney
             {
                 rb.drag = airDrag;
             }
-        }
-
-        private void HandleGroundDetection()
-        {
-            isGrounded = Physics.CheckSphere(transform.position - new Vector3(0, 1, 0), groundDetectionDistance, groundLayer);
         }
 
         private void HandleJump()
@@ -114,11 +87,11 @@ namespace NoStackDev.BigMoney
 
         private void HandleMovement()
         {
-            if (isGrounded && !OnSlope())
+            if (groundDetection.isGrounded && !groundDetection.OnSlope())
             {
                 rb.AddForce(moveDirection.normalized * moveSpeed * moveMultiplier, ForceMode.Acceleration);
             }
-            else if (isGrounded && OnSlope())
+            else if (groundDetection.isGrounded && groundDetection.OnSlope())
             {
                 rb.AddForce(slopeMoveDirection.normalized * moveSpeed * moveMultiplier, ForceMode.Acceleration);
             }
