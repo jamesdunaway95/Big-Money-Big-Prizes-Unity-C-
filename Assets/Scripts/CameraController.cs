@@ -4,20 +4,43 @@ namespace NoStackDev.BigMoney
 {
     public class CameraController : MonoBehaviour
     {
-        [SerializeField] private Transform cameraFollow;
+        [SerializeField] private Camera normalCamera;
 
-        [Header("FOV")]
-        private float baseFov;
-        private float wallRunFov;
+        [Header("Camera FOV")]
+        [SerializeField] private float baseFov = 80f;
+        [SerializeField] private float fovTime = 8f;
 
-        private void Update()
+
+        [Header("Camera Tilt")]
+        [HideInInspector] public float currentTilt;
+        [SerializeField] private float tiltAmount = 15f;
+        [SerializeField] private float tiltTime = 5f;
+
+        public void UpdateFOV(float fovMultiplier)
         {
-            FollowPlayer();
+            normalCamera.fieldOfView = Mathf.Lerp(normalCamera.fieldOfView, baseFov * fovMultiplier, fovTime * Time.deltaTime);
         }
 
-        private void FollowPlayer()
+        public void ResetFOV()
         {
-            transform.position = cameraFollow.position;
+            normalCamera.fieldOfView = Mathf.Lerp(normalCamera.fieldOfView, baseFov, fovTime * Time.deltaTime);
+        }
+
+        public void TiltCamera(bool isLeft)
+        {
+            if (isLeft)
+            {
+                currentTilt = Mathf.Lerp(currentTilt, -tiltAmount, tiltTime * Time.deltaTime);
+            }
+            else if (!isLeft)
+            {
+                currentTilt = Mathf.Lerp(currentTilt, tiltAmount, tiltTime * Time.deltaTime);
+            }
+        }
+
+        public void ResetTilt()
+        {
+            currentTilt = Mathf.Lerp(currentTilt, 0, tiltTime * Time.deltaTime);
         }
     }
 }

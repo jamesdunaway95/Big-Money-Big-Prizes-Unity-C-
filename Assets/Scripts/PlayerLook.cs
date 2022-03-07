@@ -4,6 +4,8 @@ namespace NoStackDev.BigMoney
 {
     public class PlayerLook : MonoBehaviour
     {
+        private CameraController cameraController;
+
         [SerializeField] private Transform orientation;
 
         [Header("Camera")]
@@ -28,6 +30,11 @@ namespace NoStackDev.BigMoney
             Cursor.visible = false;
         }
 
+        private void Awake()
+        {
+            cameraController = GetComponent<CameraController>();
+        }
+
         private void Update()
         {
             yRotation -= lookInput.x * xSensitivity * multiplier;
@@ -36,7 +43,7 @@ namespace NoStackDev.BigMoney
 
             xRotation = Mathf.Clamp(xRotation, maxLookAngle, minLookAngle);
 
-            normalCamera.rotation = Quaternion.Euler(xRotation, yRotation, 0);
+            normalCamera.rotation = Quaternion.Euler(xRotation, yRotation, cameraController.currentTilt);
             orientation.rotation = Quaternion.Euler(0, yRotation, 0);
         }
     }
