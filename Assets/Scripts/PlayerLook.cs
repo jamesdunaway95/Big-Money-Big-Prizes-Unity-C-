@@ -1,12 +1,9 @@
-using System;
 using UnityEngine;
 
 namespace NoStackDev.BigMoney
 {
     public class PlayerLook : MonoBehaviour
     {
-        private InputManager input;
-
         [SerializeField] private Transform orientation;
 
         [Header("Camera")]
@@ -18,18 +15,12 @@ namespace NoStackDev.BigMoney
         [SerializeField] private float maxLookAngle = -90f;
         [SerializeField] private float minLookAngle = 80f;
 
-        private float xLookInput;
-        private float yLookInput;
+        [HideInInspector] public Vector2 lookInput;
 
         private float multiplier =- 0.01f;
 
         private float xRotation;
         private float yRotation;
-
-        private void Awake()
-        {
-            input = GetComponent<InputManager>();
-        }
 
         private void Start()
         {
@@ -39,12 +30,9 @@ namespace NoStackDev.BigMoney
 
         private void Update()
         {
-            xLookInput = input.lookInput.x;
-            yLookInput = input.lookInput.y;
-
-            yRotation -= xLookInput * xSensitivity * multiplier;
-            if (invertY) { xRotation -= yLookInput * ySensitivity * multiplier; }
-            xRotation += yLookInput * ySensitivity * multiplier;
+            yRotation -= lookInput.x * xSensitivity * multiplier;
+            if (invertY) { xRotation -= lookInput.y * ySensitivity * multiplier; }
+            xRotation += lookInput.y * ySensitivity * multiplier;
 
             xRotation = Mathf.Clamp(xRotation, maxLookAngle, minLookAngle);
 

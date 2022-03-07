@@ -4,9 +4,10 @@ namespace NoStackDev.BigMoney
 {
     public class GroundDetection : MonoBehaviour
     {
+        [SerializeField] private Transform groundDetection;
         [SerializeField] private LayerMask groundLayer;
         [SerializeField] private float playerHeight = 2f;
-        [SerializeField] private float groundDetectionDistance = 0.4f;
+        [SerializeField] private float groundDetectionDistance = 0.1f;
         public bool isGrounded;
 
         private RaycastHit slopeHit;
@@ -39,7 +40,7 @@ namespace NoStackDev.BigMoney
 
         private void HandleGroundDetection()
         {
-            isGrounded = Physics.CheckSphere(transform.position - new Vector3(0, 1, 0), groundDetectionDistance, groundLayer);
+            isGrounded = Physics.CheckSphere(groundDetection.position, groundDetectionDistance, groundLayer);
         }
 
     }

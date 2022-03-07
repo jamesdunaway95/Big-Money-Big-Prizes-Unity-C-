@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace NoStackDev.BigMoney
 {
@@ -6,12 +7,10 @@ namespace NoStackDev.BigMoney
     {
         // Components
         private PlayerControls playerControls;
+        private PlayerMovement playerMovement;
+        private PlayerLook playerLook;
 
-        // Variables
-        public Vector2 movementInput;
-        public Vector2 lookInput;
-        public bool sprintInput;
-        public bool jumpInput;
+        public UnityEvent jumpInput;
 
         private void OnEnable()
         {
@@ -19,14 +18,8 @@ namespace NoStackDev.BigMoney
             {
                 playerControls = new PlayerControls();
 
-                playerControls.Gameplay.Movement.performed += i => movementInput = i.ReadValue<Vector2>();
-                playerControls.Gameplay.Look.performed += i => lookInput = i.ReadValue<Vector2>();
-
-                playerControls.Gameplay.Jump.performed += i => jumpInput = true;
-                playerControls.Gameplay.Jump.canceled += i => jumpInput = false;
-
-                playerControls.Gameplay.Sprint.performed += i => sprintInput = true;
-                playerControls.Gameplay.Sprint.canceled += i => sprintInput = false;
+                playerControls.Gameplay.Movement.performed += i => playerMovement.movementInput = i.ReadValue<Vector2>();
+                playerControls.Gameplay.Look.performed += i => playerLook.lookInput = i.ReadValue<Vector2>();
             }
 
             playerControls.Enable();
@@ -36,5 +29,34 @@ namespace NoStackDev.BigMoney
         {
             playerControls.Disable();
         }
+
+        private void Awake()
+        {
+            playerMovement = GetComponent<PlayerMovement>();
+            playerLook = GetComponent<PlayerLook>();
+        }
+
+        private void Update()
+        {
+            HandleJumpInput();
+            HandleDashInput();
+        }
+
+        private void HandleJumpInput()
+        {
+            if (playerControls.Gameplay.Jump.triggered)
+            {
+                jumpInput.Invoke();
+            }
+        }
+
+        private void HandleDashInput()
+        {
+            if (playerControls.Gameplay.Dash.triggered)
+            {
+                playerMovement.Dash();
+            }
+        }
+
     }
 }
