@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -7,10 +8,11 @@ namespace NoStackDev.BigMoney
     {
         // Components
         private PlayerControls playerControls;
-        private PlayerMovement playerMovement;
+        // private PlayerMovement playerMovement;
         private PlayerLook playerLook;
 
         public UnityEvent jumpInput;
+        public UnityEvent dashInput;
 
         private void OnEnable()
         {
@@ -18,7 +20,7 @@ namespace NoStackDev.BigMoney
             {
                 playerControls = new PlayerControls();
 
-                playerControls.Gameplay.Movement.performed += i => playerMovement.movementInput = i.ReadValue<Vector2>();
+                // playerControls.Gameplay.Movement.performed += i => playerMovement = i.ReadValue<Vector2>();
                 playerControls.Gameplay.Look.performed += i => playerLook.lookInput = i.ReadValue<Vector2>();
             }
 
@@ -32,7 +34,6 @@ namespace NoStackDev.BigMoney
 
         private void Awake()
         {
-            playerMovement = GetComponent<PlayerMovement>();
             playerLook = GetComponent<PlayerLook>();
         }
 
@@ -54,9 +55,8 @@ namespace NoStackDev.BigMoney
         {
             if (playerControls.Gameplay.Dash.triggered)
             {
-                playerMovement.Dash();
+                dashInput.Invoke();
             }
         }
-
     }
 }
