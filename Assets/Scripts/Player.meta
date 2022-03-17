@@ -1,5 +1,13 @@
 fileFormatVersion: 2
+<<<<<<< HEAD
 guid: 8627c07fe1c0a6640a02cf396d774e44
+=======
+<<<<<<< HEAD:Assets/Scenes/SampleScene.meta
+guid: 6532edd87db6529458fb38d9b5b032dd
+=======
+guid: 8627c07fe1c0a6640a02cf396d774e44
+>>>>>>> 2babb41109e75060e8ad637adf3539a9536d8b04:Assets/Scripts/Player.meta
+>>>>>>> 2babb41109e75060e8ad637adf3539a9536d8b04
 folderAsset: yes
 DefaultImporter:
   externalObjects: {}

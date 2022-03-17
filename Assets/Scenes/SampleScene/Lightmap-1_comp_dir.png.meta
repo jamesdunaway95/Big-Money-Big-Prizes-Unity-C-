@@ -1,5 +1,13 @@
 fileFormatVersion: 2
+<<<<<<< HEAD
+<<<<<<< HEAD:Assets/Scenes/SampleScene/Lightmap-1_comp_dir.png.meta
 guid: 2f40b2b593914de4682fd49710fff79d
+=======
+guid: 3bbdc29160e7a0c40b10174a5b6fa5db
+>>>>>>> 2babb41109e75060e8ad637adf3539a9536d8b04:Assets/Scenes/SampleScene/Lightmap-0_comp_light.exr.meta
+=======
+guid: 2f40b2b593914de4682fd49710fff79d
+>>>>>>> 2babb41109e75060e8ad637adf3539a9536d8b04
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -49,10 +57,23 @@ TextureImporter:
   spritePixelsToUnits: 100
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
+<<<<<<< HEAD
+<<<<<<< HEAD:Assets/Scenes/SampleScene/Lightmap-1_comp_dir.png.meta
+=======
+>>>>>>> 2babb41109e75060e8ad637adf3539a9536d8b04
   alphaUsage: 1
   alphaIsTransparency: 0
   spriteTessellationDetail: -1
   textureType: 12
+<<<<<<< HEAD
+=======
+  alphaUsage: 0
+  alphaIsTransparency: 0
+  spriteTessellationDetail: -1
+  textureType: 6
+>>>>>>> 2babb41109e75060e8ad637adf3539a9536d8b04:Assets/Scenes/SampleScene/Lightmap-0_comp_light.exr.meta
+=======
+>>>>>>> 2babb41109e75060e8ad637adf3539a9536d8b04
   textureShape: 1
   singleChannelComponent: 0
   flipbookRows: 1

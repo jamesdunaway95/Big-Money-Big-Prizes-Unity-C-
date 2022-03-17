@@ -8,6 +8,7 @@ namespace NoStackDev.BigMoney
     {
         private Rigidbody rb;
         private GroundDetection groundDetection;
+<<<<<<< HEAD
         private InputManager inputManager;
         private CapsuleCollider capsuleCollider;
 
@@ -65,10 +66,33 @@ namespace NoStackDev.BigMoney
             rb.freezeRotation = true;
 
             originalHeight = capsuleCollider.height;
+=======
+
+        [Header("Movement")]
+        [SerializeField] private Transform orientation;
+        public float maxSpeed = 22f;
+        [SerializeField] private float moveSpeed = 6f;
+        [SerializeField] private float moveMultiplier = 10f;
+        [SerializeField] private float airMultiplier = 2.75f;
+        [SerializeField] private float jumpForce = 16f;
+        [HideInInspector] public Vector3 sumOfAppliedAccelerations;
+
+        [HideInInspector] public Vector2 movementInput;
+        [HideInInspector] public Vector3 moveDirection;
+        private Vector3 slopeMoveDirection;
+
+        private void Awake()
+        {
+            rb = GetComponent<Rigidbody>();
+            groundDetection = GetComponent<GroundDetection>();
+
+            rb.freezeRotation = true;
+>>>>>>> 2babb41109e75060e8ad637adf3539a9536d8b04
         }
 
         private void Update()
         {
+<<<<<<< HEAD
             HandleMovementState();
             LimitVelocity();
 
@@ -156,20 +180,61 @@ namespace NoStackDev.BigMoney
                     Vector3 limitedVelocity = flatVelocity.normalized * maxSpeed;
                     rb.velocity = new Vector3(limitedVelocity.x, rb.velocity.y, limitedVelocity.z);
                 }
+=======
+            moveDirection = orientation.forward * movementInput.y + orientation.right * movementInput.x;
+
+            slopeMoveDirection = Vector3.ProjectOnPlane(moveDirection, groundDetection.SlopeHit().normal);
+        }
+
+        #region Movement
+        private void FixedUpdate()
+        {
+            HandleMovement();
+        }
+
+        private void HandleMovement()
+        {
+            if (GetComponent<PlayerSlide>().isSliding) return;
+
+            if (groundDetection.isGrounded && !groundDetection.OnSlope())
+            {
+                Debug.Log("On flat ground");
+                sumOfAppliedAccelerations = moveDirection.normalized * moveSpeed * moveMultiplier;
+                rb.AddForce(sumOfAppliedAccelerations, ForceMode.Force);
+            }
+            else if (groundDetection.isGrounded && groundDetection.OnSlope())
+            {
+                Debug.Log("On regular slope");
+                sumOfAppliedAccelerations = slopeMoveDirection.normalized * moveSpeed * moveMultiplier;
+                rb.AddForce(sumOfAppliedAccelerations, ForceMode.Acceleration);
+            }
+            else
+            {
+                Debug.Log("In the air");
+                sumOfAppliedAccelerations = moveDirection.normalized * moveSpeed * airMultiplier;
+                rb.AddForce(sumOfAppliedAccelerations, ForceMode.Acceleration);
+>>>>>>> 2babb41109e75060e8ad637adf3539a9536d8b04
             }
         }
         #endregion
 
+<<<<<<< HEAD
         #region Jumping
         public void Jump()
         {
             readyToJump = false;
 
             Invoke(nameof(ResetJump), jumpCooldown);
+=======
+        public void Jump()
+        {
+            if (!groundDetection.isGrounded) return;
+>>>>>>> 2babb41109e75060e8ad637adf3539a9536d8b04
 
             rb.velocity = new Vector3(rb.velocity.x, 0, rb.velocity.z);
             rb.AddForce(transform.up * jumpForce, ForceMode.Impulse);
         }
+<<<<<<< HEAD
 
         private void ResetJump()
         {
@@ -196,5 +261,7 @@ namespace NoStackDev.BigMoney
             transform.localScale = new Vector3(transform.localScale.x, originalHeight * 0.5f, transform.localScale.z); // Only temporary until a model and animation is added.
         }
         #endregion
+=======
+>>>>>>> 2babb41109e75060e8ad637adf3539a9536d8b04
     }
 }
