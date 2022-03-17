@@ -7,15 +7,17 @@ namespace NoStackDev.BigMoney
     {
         // Components
         private PlayerControls playerControls;
-        private PlayerMovement playerMovement;
-        private PlayerLook playerLook;
+
+        public Vector2 movementInput;
+        public Vector2 lookInput;
 
         public bool sprintInput;
         public bool jumpInput;
         public bool wallJumpInput;
         public bool crouchInput;
+        public bool slideInput;
 
-        public UnityEvent slideInput;
+        // public UnityEvent slideInput;
 
         private void OnEnable()
         {
@@ -23,8 +25,8 @@ namespace NoStackDev.BigMoney
             {
                 playerControls = new PlayerControls();
 
-                playerControls.Gameplay.Movement.performed += i => playerMovement.movementInput = i.ReadValue<Vector2>();
-                playerControls.Gameplay.Look.performed += i => playerLook.lookInput = i.ReadValue<Vector2>();
+                playerControls.Gameplay.Movement.performed += i => movementInput = i.ReadValue<Vector2>();
+                playerControls.Gameplay.Look.performed += i => lookInput = i.ReadValue<Vector2>();
 
                 playerControls.Gameplay.Sprint.performed += i => sprintInput = true;
                 playerControls.Gameplay.Sprint.canceled += i => sprintInput = false;
@@ -34,6 +36,9 @@ namespace NoStackDev.BigMoney
 
                 playerControls.Gameplay.Crouch.performed += i => crouchInput = true;
                 playerControls.Gameplay.Crouch.canceled += i => crouchInput = false;
+
+                playerControls.Gameplay.Slide.performed += i => slideInput = true;
+                playerControls.Gameplay.Slide.canceled += i => slideInput = false;
             }
 
             playerControls.Enable();
@@ -44,15 +49,8 @@ namespace NoStackDev.BigMoney
             playerControls.Disable();
         }
 
-        private void Awake()
-        {
-            playerMovement = GetComponent<PlayerMovement>();
-            playerLook = GetComponent<PlayerLook>();
-        }
-
         private void Update()
         {
-            HandleSlideInput();
             HandleWallJumpInput();
         }
 
@@ -66,15 +64,6 @@ namespace NoStackDev.BigMoney
             else
             {
                 wallJumpInput = false;
-            }
-        }
-
-        // FIXME: This should be changed back to old method, like the jump, invoking is limiting.
-        private void HandleSlideInput()
-        {
-            if (playerControls.Gameplay.Slide.triggered)
-            {
-                slideInput.Invoke();
             }
         }
     }

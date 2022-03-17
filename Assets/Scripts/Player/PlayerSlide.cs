@@ -16,11 +16,15 @@ namespace NoStackDev.BigMoney
         [SerializeField] private Transform orientation;
 
 
-        private float originalHeight;
-        [SerializeField] private float reducedHeight;
+        [Header("Sliding")]
+        [SerializeField] private float maxSlideTime;
         [SerializeField] private float slideForce = 100f;
-        [SerializeField] private float slideCooldown = 1f;
-        private bool canSlide = true;
+        [SerializeField] private float slideCooldown = 2f;
+        private float slideTimer;
+        private bool readyToSlide = true;
+
+        private float originalHeight;
+        private float reducedHeight = 1f;
 
         private void Awake()
         {
@@ -32,48 +36,59 @@ namespace NoStackDev.BigMoney
 
             originalHeight = cCollider.height;
         }
-        private IEnumerator SlideCoolDown()
-        {
-            yield return new WaitForSeconds(slideCooldown);
-
-            canSlide = true;
-        }
-
 
         private void Update()
         {
-            if (playerMovement.isSliding && rb.velocity.magnitude < 2f)
+            if (inputManager.slideInput && inputManager.movementInput != Vector2.zero 
+                && readyToSlide && !playerMovement.isSliding)
+            {
+                StartSlide();
+            }
+
+            if (playerMovement.isSliding && !inputManager.slideInput)
             {
                 StopSlide();
             }
         }
 
-        public void Slide()
+        private void FixedUpdate()
         {
             if (playerMovement.isSliding)
             {
-                StopSlide();
+                SlidingMovement();
             }
+        }
 
-            if (rb.velocity.magnitude < 2f || !canSlide || playerMovement.movementInput.y <= 0) return;
-
-
+        private void StartSlide()
+        {
             playerMovement.isSliding = true;
-            canSlide = false;
 
             cCollider.height = reducedHeight;
             transform.localScale = new Vector3(transform.localScale.x, reducedHeight * 0.5f, transform.localScale.z); // Only temporary until a model and animation is added.
 
-            rb.AddRelativeForce(Vector3.down * 5f, ForceMode.Force);
+            rb.AddRelativeForce(Vector3.down * 2f, ForceMode.Impulse);
 
+            slideTimer = maxSlideTime;
+        }
 
-            if (!groundDetection.OnSlope() || rb.velocity.y > -0.1f) // Normal slide
+        private void SlidingMovement()
+        {
+            Vector3 inputDirection = orientation.forward * inputManager.movementInput.y + orientation.right * inputManager.movementInput.x;
+
+            if (!groundDetection.OnSlope() || rb.velocity.y > -0.1f)
             {
-                rb.AddRelativeForce(orientation.forward * slideForce * rb.velocity.magnitude, ForceMode.Force);
+                rb.AddRelativeForce(inputDirection.normalized * slideForce * (rb.velocity.magnitude * 0.35f), ForceMode.Force);
+
+                slideTimer -= Time.deltaTime;
             }
-            else // Down slope slide
+            else
             {
-                rb.AddRelativeForce(groundDetection.GetSlopeMoveDirection(orientation.forward) * slideForce * rb.velocity.magnitude, ForceMode.Force);
+                rb.AddRelativeForce(groundDetection.GetSlopeMoveDirection(inputDirection) * slideForce, ForceMode.Force);
+            }
+
+            if (slideTimer <= 0)
+            {
+                StopSlide();
             }
         }
 
@@ -81,10 +96,17 @@ namespace NoStackDev.BigMoney
         {
             playerMovement.isSliding = false;
 
-            StartCoroutine(SlideCoolDown());
-
             cCollider.height = originalHeight;
             transform.localScale = new Vector3(transform.localScale.x, originalHeight * 0.5f, transform.localScale.z); // Only temporary until a model and animation is added.
+
+            readyToSlide = false;
+
+            Invoke(nameof(ResetSlide), slideCooldown);
+        }
+
+        private void ResetSlide()
+        {
+            readyToSlide = true;
         }
     }
 }

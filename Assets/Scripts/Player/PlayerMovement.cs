@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 namespace NoStackDev.BigMoney
@@ -14,36 +15,42 @@ namespace NoStackDev.BigMoney
         [Header("Movement")]
         [SerializeField] private Transform orientation;
         [SerializeField] private float maxSpeed = 12f;
-        [SerializeField] private float moveSpeed = 6f;
-        [SerializeField] private float walkSpeed = 8f;
-        [SerializeField] private float sprintSpeed = 13f;
+        [SerializeField] private float walkSpeed = 7f;
+        [SerializeField] private float sprintSpeed = 10f;
 
-        [SerializeField] private float moveMultiplier = 10f;
-        [SerializeField] private float slopeMultiplier = 9f;
+        private float moveSpeed;
+        private float desiredMoveSpeed;
+        private float lastDesiredMoveSpeed;
+
+        [Tooltip("Changes how fast you speed Accelerate.")]
+        public float speedIncreaseMultiplier;
+        [Tooltip("Changes how much the slope angle affects your speed.")]
+        public float slopeIncreaseMultipler;
 
         [Header("Jumping / Falling")]
-        [SerializeField] private float airMultiplier = 2.75f;
-        [SerializeField] private float jumpForce = 16f;
+        [SerializeField] private float airMultiplier = 0.4f;
+        [SerializeField] private float jumpForce = 12f;
         [SerializeField] private float jumpCooldown;
         private bool readyToJump = true;
 
         [Header("Sliding")]
+        [SerializeField] private float slideSpeed = 25f;
         [SerializeField] private float slideMultiplier;
         public bool isSliding = false;
 
         [Header("Crouching")]
         [SerializeField] private float crouchSpeed;
-        private float originalHeight;
         [SerializeField] private float reducedHeight;
         public bool isCrouching = false;
+        private float originalHeight;
 
 
         [HideInInspector] public Vector2 movementInput;
         private Vector3 moveDirection;
 
-        private Vector3 slopeMoveDirection;
-
         public MovementState state;
+
+        public float velocity;
 
         public enum MovementState
         {
@@ -69,6 +76,8 @@ namespace NoStackDev.BigMoney
 
         private void Update()
         {
+            velocity = rb.velocity.magnitude;
+
             HandleMovementState();
             LimitVelocity();
 
@@ -87,59 +96,72 @@ namespace NoStackDev.BigMoney
         #region Movement
         private void HandleMovementState()
         {
-            if (isCrouching)
-            {
-                state = MovementState.crouching;
-                moveSpeed = crouchSpeed;
-            }
-            else if (isSliding)
+            if (isSliding)
             {
                 state = MovementState.sliding;
+
+                if (groundDetection.OnSlope() && rb.velocity.y < 0.1f)
+                {
+                    desiredMoveSpeed = slideSpeed;
+                } 
+                else
+                {
+                    desiredMoveSpeed = sprintSpeed;
+                }
+            }
+            else if (isCrouching)
+            {
+                state = MovementState.crouching;
+                desiredMoveSpeed = crouchSpeed;
             }
             else if (groundDetection.isGrounded && inputManager.sprintInput)
             {
                 state = MovementState.sprinting;
-                moveSpeed = sprintSpeed;
+                desiredMoveSpeed = sprintSpeed;
             }
             else if (groundDetection.isGrounded)
             {
                 state = MovementState.walking;
-                moveSpeed = walkSpeed;
+                desiredMoveSpeed = walkSpeed;
             }
             else
             {
                 state = MovementState.air;
             }
+
+            if (Mathf.Abs(desiredMoveSpeed - lastDesiredMoveSpeed) > 4f && moveSpeed != 0)
+            {
+                StopAllCoroutines();
+                StartCoroutine(LerpMoveSpeed());
+            }
+            else
+            {
+                moveSpeed = desiredMoveSpeed;
+            }
+
+            lastDesiredMoveSpeed = desiredMoveSpeed;
         }
 
         private void HandleMovement()
         {
-            if (isSliding)
+            moveDirection = orientation.forward * inputManager.movementInput.y + orientation.right * inputManager.movementInput.x;
+
+            if (groundDetection.OnSlope())
             {
-                moveDirection = orientation.right * movementInput.x;
-                rb.AddRelativeForce(moveDirection.normalized * moveSpeed * slideMultiplier, ForceMode.Force);
-            }
-            else if (groundDetection.OnSlope())
-            {
-                moveDirection = orientation.forward * movementInput.y + orientation.right * movementInput.x;
-                rb.AddRelativeForce(groundDetection.GetSlopeMoveDirection(moveDirection) * moveSpeed * slopeMultiplier, ForceMode.Force);
+                rb.AddRelativeForce(groundDetection.GetSlopeMoveDirection(moveDirection) * moveSpeed * 7f, ForceMode.Force);
             }
             else if (groundDetection.isGrounded)
             {
-                moveDirection = orientation.forward * movementInput.y + orientation.right * movementInput.x;
-                rb.AddRelativeForce(moveDirection.normalized * moveSpeed * moveMultiplier, ForceMode.Force);
+                rb.AddRelativeForce(moveDirection.normalized * moveSpeed * 10f, ForceMode.Force);
             }
             else if (!groundDetection.isGrounded)
             {
-                moveDirection = orientation.forward * movementInput.y + orientation.right * movementInput.x;
                 rb.AddRelativeForce(moveDirection.normalized * moveSpeed * airMultiplier, ForceMode.Force);
             }
         }
 
         private void LimitVelocity()
         {
-            if (isSliding) return;
-
             if (groundDetection.OnSlope())
             {
                 if (rb.velocity.magnitude > maxSpeed)
@@ -157,6 +179,34 @@ namespace NoStackDev.BigMoney
                     rb.velocity = new Vector3(limitedVelocity.x, rb.velocity.y, limitedVelocity.z);
                 }
             }
+        }
+
+        private IEnumerator LerpMoveSpeed()
+        {
+            float time = 0;
+            float difference = Mathf.Abs(desiredMoveSpeed - moveSpeed);
+            float startValue = moveSpeed;
+
+            while (time < difference)
+            {
+                moveSpeed = Mathf.Lerp(startValue, desiredMoveSpeed, time / difference);
+
+                if (groundDetection.OnSlope())
+                {
+                    float slopeAngle = Vector3.Angle(Vector3.up, groundDetection.slopeHit.normal);
+                    float slopeAngleIncrease = 1 + (slopeAngle / 90f);
+
+                    time += Time.deltaTime * speedIncreaseMultiplier * slopeIncreaseMultipler * slopeAngleIncrease;
+                }
+                else
+                {
+                    time += Time.deltaTime * speedIncreaseMultiplier;
+                }
+
+                yield return null;
+            }
+
+            moveSpeed = desiredMoveSpeed;
         }
         #endregion
 

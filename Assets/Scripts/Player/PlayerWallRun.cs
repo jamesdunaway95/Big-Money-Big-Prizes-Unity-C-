@@ -55,12 +55,10 @@ namespace NoStackDev.BigMoney
             {
                 if (wallLeft)
                 {
-                    Debug.Log("left wall run");
                     StartWallRun();
                 }
                 else if (wallRight)
                 {
-                    Debug.Log("right wall run");
                     StartWallRun();
                 }
                 else
@@ -80,17 +78,15 @@ namespace NoStackDev.BigMoney
 
             if (wallLeft)
             {
-                Debug.Log("Jumped off left wall");
-                Vector3 wallRunJumpDirection = transform.up + orientation.forward + wallLeftHit.normal;
+                Vector3 wallRunJumpDirection = transform.up + (orientation.forward * 0.5f) + wallLeftHit.normal;
                 rb.velocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
-                rb.AddForce(wallRunJumpDirection * wallJumpForce * (75 + rb.velocity.magnitude * 2), ForceMode.Force);
+                rb.AddRelativeForce(wallRunJumpDirection * wallJumpForce * (75 + rb.velocity.magnitude * 2), ForceMode.Force);
             }
             else if (wallRight)
             {
-                Debug.Log("Jumped off right wall");
-                Vector3 wallRunJumpDirection = transform.up + orientation.forward + wallRightHit.normal;
+                Vector3 wallRunJumpDirection = transform.up + (orientation.forward * 0.5f) + wallRightHit.normal;
                 rb.velocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
-                rb.AddForce(wallRunJumpDirection * wallJumpForce * (75 + rb.velocity.magnitude * 2), ForceMode.Force);
+                rb.AddRelativeForce(wallRunJumpDirection * wallJumpForce * (75 + rb.velocity.magnitude * 2), ForceMode.Force);
             }
         }
 

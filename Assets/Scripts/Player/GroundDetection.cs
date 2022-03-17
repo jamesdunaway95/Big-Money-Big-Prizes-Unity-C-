@@ -13,7 +13,7 @@ namespace NoStackDev.BigMoney
 
         [Header("Slopes")]
         [SerializeField] private float maxSlopeAngle;
-        private RaycastHit slopeHit;
+        [HideInInspector] public RaycastHit slopeHit;
 
         public bool OnSlope()
         {

@@ -5,6 +5,7 @@ namespace NoStackDev.BigMoney
     public class PlayerLook : MonoBehaviour
     {
         private CameraController cameraController;
+        private InputManager inputManager;
 
         [SerializeField] private Transform orientation;
 
@@ -33,13 +34,14 @@ namespace NoStackDev.BigMoney
         private void Awake()
         {
             cameraController = GetComponent<CameraController>();
+            inputManager = GetComponent<InputManager>();
         }
 
         private void Update()
         {
-            yRotation -= lookInput.x * xSensitivity * multiplier;
-            if (invertY) { xRotation -= lookInput.y * ySensitivity * multiplier; }
-            xRotation += lookInput.y * ySensitivity * multiplier;
+            yRotation -= inputManager.lookInput.x * xSensitivity * multiplier;
+            if (invertY) { xRotation -= inputManager.lookInput.y * ySensitivity * multiplier; }
+            xRotation += inputManager.lookInput.y * ySensitivity * multiplier;
 
             xRotation = Mathf.Clamp(xRotation, maxLookAngle, minLookAngle);
 

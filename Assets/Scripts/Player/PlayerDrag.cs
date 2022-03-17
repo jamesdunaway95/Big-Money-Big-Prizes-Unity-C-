@@ -9,7 +9,6 @@ namespace NoStackDev.BigMoney
 
         [SerializeField] private float groundDrag = 6f;
         [SerializeField] private float airDrag = 1f;
-        [SerializeField] private float slideDrag = 3f;
 
         private void Awake()
         {
@@ -27,10 +26,6 @@ namespace NoStackDev.BigMoney
             if (groundDetection.isGrounded)
             {
                 rb.drag = groundDrag;
-            }
-            else if (GetComponent<PlayerMovement>().isSliding && groundDetection.isGrounded)
-            {
-                rb.drag = slideDrag;
             }
             else
             {
