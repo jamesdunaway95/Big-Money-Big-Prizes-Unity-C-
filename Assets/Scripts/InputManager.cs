@@ -10,7 +10,12 @@ namespace NoStackDev.BigMoney
         private PlayerMovement playerMovement;
         private PlayerLook playerLook;
 
-        public UnityEvent jumpInput;
+        public bool sprintInput;
+        public bool jumpInput;
+        public bool wallJumpInput;
+        public bool crouchInput;
+
+        public UnityEvent slideInput;
 
         private void OnEnable()
         {
@@ -20,6 +25,15 @@ namespace NoStackDev.BigMoney
 
                 playerControls.Gameplay.Movement.performed += i => playerMovement.movementInput = i.ReadValue<Vector2>();
                 playerControls.Gameplay.Look.performed += i => playerLook.lookInput = i.ReadValue<Vector2>();
+
+                playerControls.Gameplay.Sprint.performed += i => sprintInput = true;
+                playerControls.Gameplay.Sprint.canceled += i => sprintInput = false;
+
+                playerControls.Gameplay.Jump.performed += i => jumpInput = true;
+                playerControls.Gameplay.Jump.canceled += i => jumpInput = false;
+
+                playerControls.Gameplay.Crouch.performed += i => crouchInput = true;
+                playerControls.Gameplay.Crouch.canceled += i => crouchInput = false;
             }
 
             playerControls.Enable();
@@ -38,25 +52,30 @@ namespace NoStackDev.BigMoney
 
         private void Update()
         {
-            HandleJumpInput();
-            HandleDashInput();
+            HandleSlideInput();
+            HandleWallJumpInput();
         }
 
-        private void HandleJumpInput()
+        // This is separate due to the two different ways the input should be read.
+        private void HandleWallJumpInput()
         {
             if (playerControls.Gameplay.Jump.triggered)
             {
-                jumpInput.Invoke();
+                wallJumpInput = true;
             }
-        }
-
-        private void HandleDashInput()
-        {
-            if (playerControls.Gameplay.Dash.triggered)
+            else
             {
-                playerMovement.Dash();
+                wallJumpInput = false;
             }
         }
 
+        // FIXME: This should be changed back to old method, like the jump, invoking is limiting.
+        private void HandleSlideInput()
+        {
+            if (playerControls.Gameplay.Slide.triggered)
+            {
+                slideInput.Invoke();
+            }
+        }
     }
 }

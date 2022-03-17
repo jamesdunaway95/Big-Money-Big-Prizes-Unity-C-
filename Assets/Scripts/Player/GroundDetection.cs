@@ -4,33 +4,32 @@ namespace NoStackDev.BigMoney
 {
     public class GroundDetection : MonoBehaviour
     {
+        [Header("Ground Detection")]
         [SerializeField] private Transform groundDetection;
         [SerializeField] private LayerMask groundLayer;
         [SerializeField] private float playerHeight = 2f;
-        [SerializeField] private float groundDetectionDistance = 0.1f;
+        [SerializeField] private float groundDetectionDistance = 0.3f;
         public bool isGrounded;
 
+        [Header("Slopes")]
+        [SerializeField] private float maxSlopeAngle;
         private RaycastHit slopeHit;
-
-        public RaycastHit SlopeHit()
-        {
-            return slopeHit;
-        }
 
         public bool OnSlope()
         {
-            if (Physics.Raycast(transform.position, Vector3.down, out slopeHit, playerHeight * 0.5f + 0.5f))
+            if (Physics.Raycast(transform.position, Vector3.down, out slopeHit, (playerHeight * 0.5f) + 0.5f))
             {
-                if (slopeHit.normal != Vector3.up)
-                {
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
+                float angle = Vector3.Angle(Vector3.up, slopeHit.normal);
+
+                return angle < maxSlopeAngle && angle != 0;
             }
+
             return false;
+        }
+
+        public Vector3 GetSlopeMoveDirection(Vector3 direction)
+        {
+            return Vector3.ProjectOnPlane(direction, slopeHit.normal).normalized;
         }
 
         private void Update()

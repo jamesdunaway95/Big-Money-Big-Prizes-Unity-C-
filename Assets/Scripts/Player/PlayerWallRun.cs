@@ -2,9 +2,10 @@ using UnityEngine;
 
 namespace NoStackDev.BigMoney
 {
-    public class WallRun : MonoBehaviour
+    public class PlayerWallRun : MonoBehaviour
     {
         private Rigidbody rb;
+        private InputManager inputManager;
         private CameraController cameraController;
 
         [Header("Movement")]
@@ -36,6 +37,7 @@ namespace NoStackDev.BigMoney
         private void Awake()
         {
             rb = GetComponent<Rigidbody>();
+            inputManager = GetComponent<InputManager>();
             cameraController = GetComponent<CameraController>();
         }
 
@@ -43,6 +45,8 @@ namespace NoStackDev.BigMoney
         {
             CheckWall();
             HandleWallRun();
+
+            if (inputManager.wallJumpInput) Jump();
         }
 
         private void HandleWallRun()
@@ -51,12 +55,12 @@ namespace NoStackDev.BigMoney
             {
                 if (wallLeft)
                 {
-                    Debug.Log("Wall running - left");
+                    Debug.Log("left wall run");
                     StartWallRun();
                 }
                 else if (wallRight)
                 {
-                    Debug.Log("Wall running - right");
+                    Debug.Log("right wall run");
                     StartWallRun();
                 }
                 else
@@ -70,21 +74,23 @@ namespace NoStackDev.BigMoney
             }
         }
 
-        public void Jump()
+        private void Jump()
         {
             if (!isWallRunning) return;
 
             if (wallLeft)
             {
+                Debug.Log("Jumped off left wall");
                 Vector3 wallRunJumpDirection = transform.up + wallLeftHit.normal;
                 rb.velocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
-                rb.AddForce(wallRunJumpDirection * wallJumpForce * (100 + rb.velocity.magnitude), ForceMode.Force);
+                rb.AddForce(wallRunJumpDirection * wallJumpForce * (75 + rb.velocity.magnitude * 2), ForceMode.Force);
             }
             else if (wallRight)
             {
+                Debug.Log("Jumped off right wall");
                 Vector3 wallRunJumpDirection = transform.up + wallRightHit.normal;
                 rb.velocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
-                rb.AddForce(wallRunJumpDirection * wallJumpForce * (100 + rb.velocity.magnitude), ForceMode.Force);
+                rb.AddForce(wallRunJumpDirection * wallJumpForce * (75 + rb.velocity.magnitude * 2), ForceMode.Force);
             }
         }
 
