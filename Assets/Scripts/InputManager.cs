@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -8,20 +7,15 @@ namespace NoStackDev.BigMoney
     {
         // Components
         private PlayerControls playerControls;
-        // private PlayerMovement playerMovement;
+        private PlayerMovement playerMovement;
         private PlayerLook playerLook;
 
-<<<<<<< HEAD
         public bool sprintInput;
         public bool jumpInput;
         public bool wallJumpInput;
         public bool crouchInput;
 
         public UnityEvent slideInput;
-=======
-        public UnityEvent jumpInput;
-        public UnityEvent dashInput;
->>>>>>> 2babb41109e75060e8ad637adf3539a9536d8b04
 
         private void OnEnable()
         {
@@ -29,7 +23,7 @@ namespace NoStackDev.BigMoney
             {
                 playerControls = new PlayerControls();
 
-                // playerControls.Gameplay.Movement.performed += i => playerMovement = i.ReadValue<Vector2>();
+                playerControls.Gameplay.Movement.performed += i => playerMovement.movementInput = i.ReadValue<Vector2>();
                 playerControls.Gameplay.Look.performed += i => playerLook.lookInput = i.ReadValue<Vector2>();
 
                 playerControls.Gameplay.Sprint.performed += i => sprintInput = true;
@@ -52,6 +46,7 @@ namespace NoStackDev.BigMoney
 
         private void Awake()
         {
+            playerMovement = GetComponent<PlayerMovement>();
             playerLook = GetComponent<PlayerLook>();
         }
 
@@ -79,11 +74,7 @@ namespace NoStackDev.BigMoney
         {
             if (playerControls.Gameplay.Slide.triggered)
             {
-<<<<<<< HEAD
                 slideInput.Invoke();
-=======
-                dashInput.Invoke();
->>>>>>> 2babb41109e75060e8ad637adf3539a9536d8b04
             }
         }
     }

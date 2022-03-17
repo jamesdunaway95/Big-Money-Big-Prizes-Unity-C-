@@ -81,24 +81,16 @@ namespace NoStackDev.BigMoney
             if (wallLeft)
             {
                 Debug.Log("Jumped off left wall");
-                Vector3 wallRunJumpDirection = transform.up + wallLeftHit.normal;
+                Vector3 wallRunJumpDirection = transform.up + orientation.forward + wallLeftHit.normal;
                 rb.velocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
-<<<<<<< HEAD:Assets/Scripts/Player/PlayerWallRun.cs
                 rb.AddForce(wallRunJumpDirection * wallJumpForce * (75 + rb.velocity.magnitude * 2), ForceMode.Force);
-=======
-                rb.AddForce(wallRunJumpDirection * wallJumpForce * (50 + rb.velocity.magnitude * 3), ForceMode.Force);
->>>>>>> 2babb41109e75060e8ad637adf3539a9536d8b04:Assets/Scripts/WallRun.cs
             }
             else if (wallRight)
             {
                 Debug.Log("Jumped off right wall");
-                Vector3 wallRunJumpDirection = transform.up + wallRightHit.normal;
+                Vector3 wallRunJumpDirection = transform.up + orientation.forward + wallRightHit.normal;
                 rb.velocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
-<<<<<<< HEAD:Assets/Scripts/Player/PlayerWallRun.cs
                 rb.AddForce(wallRunJumpDirection * wallJumpForce * (75 + rb.velocity.magnitude * 2), ForceMode.Force);
-=======
-                rb.AddForce(wallRunJumpDirection * wallJumpForce * (50 + rb.velocity.magnitude * 3), ForceMode.Force);
->>>>>>> 2babb41109e75060e8ad637adf3539a9536d8b04:Assets/Scripts/WallRun.cs
             }
         }
 
