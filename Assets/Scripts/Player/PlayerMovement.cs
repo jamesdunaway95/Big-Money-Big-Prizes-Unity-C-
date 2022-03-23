@@ -45,10 +45,9 @@ namespace NoStackDev.BigMoney
         public bool isCrouching = false;
         private float originalHeight;
 
-        [Header("Camera")]
+        [Header("Camera Settings")]
         [SerializeField] private bool cameraTilt;
         [SerializeField] private float tiltAmount;
-        [SerializeField] private float tiltTime;
 
         private Vector3 moveDirection;
 
@@ -83,13 +82,18 @@ namespace NoStackDev.BigMoney
         {
             velocity = rb.velocity.magnitude; // DEBUG
 
+            // Movement
             HandleMovementState();
             LimitVelocity();
 
+            // Jumping
             if (inputManager.jumpInput && groundDetection.isGrounded && readyToJump) Jump();
+
+            // Crouching
             if (inputManager.crouchInput) Crouch();
             if (!inputManager.crouchInput && isCrouching) StopCrouch();
 
+            // Camera
             if (cameraTilt && inputManager.movementInput.x != 0) HandleCamera();
         }
 
@@ -97,7 +101,7 @@ namespace NoStackDev.BigMoney
         {
             bool isLeft = inputManager.movementInput.x < 0;
 
-            cameraController.TiltCamera(isLeft, tiltAmount, tiltTime);
+            cameraController.TiltCamera(isLeft, tiltAmount);
         }
 
         private void FixedUpdate()
@@ -210,7 +214,7 @@ namespace NoStackDev.BigMoney
                     float slopeAngle = Vector3.Angle(Vector3.up, groundDetection.slopeHit.normal);
                     float slopeAngleIncrease = 1 + (slopeAngle / 90f);
 
-                    time += Time.deltaTime * speedIncreaseMultiplier * slopeIncreaseMultipler * slopeAngleIncrease;
+                    time += Time.deltaTime * speedIncreaseMultiplier * slopeIncreaseMultipler * slopeAngleIncrease; // Velocity increases faster on slopes and even faster on steeper slopes.
                 }
                 else
                 {

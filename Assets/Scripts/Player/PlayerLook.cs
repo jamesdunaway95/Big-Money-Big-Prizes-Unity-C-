@@ -9,7 +9,7 @@ namespace NoStackDev.BigMoney
 
         [SerializeField] private Transform orientation;
 
-        [Header("Camera")]
+        [Header("Camera Look")]
         [SerializeField] private Transform normalCamera;
         [SerializeField] private float xSensitivity = 10f;
         [SerializeField] private float ySensitivity = 10f;
@@ -17,6 +17,10 @@ namespace NoStackDev.BigMoney
 
         [SerializeField] private float maxLookAngle = -90f;
         [SerializeField] private float minLookAngle = 80f;
+
+        [Header("Camera Tilt")]
+        [SerializeField] private bool enableTilt;
+        [SerializeField] private float tiltAmount;
 
         [HideInInspector] public Vector2 lookInput;
 
@@ -39,6 +43,13 @@ namespace NoStackDev.BigMoney
 
         private void Update()
         {
+            RotateCamera();
+
+            if (enableTilt && inputManager.lookInput.x != 0) RotationTilt();
+        }
+
+        private void RotateCamera()
+        {
             yRotation -= inputManager.lookInput.x * xSensitivity * multiplier;
             if (invertY) { xRotation -= inputManager.lookInput.y * ySensitivity * multiplier; }
             xRotation += inputManager.lookInput.y * ySensitivity * multiplier;
@@ -47,6 +58,13 @@ namespace NoStackDev.BigMoney
 
             normalCamera.rotation = Quaternion.Euler(xRotation, yRotation, cameraController.currentTilt);
             orientation.rotation = Quaternion.Euler(0, yRotation, 0);
+        }
+
+        private void RotationTilt()
+        {
+            bool isLeft = inputManager.lookInput.x > 0;
+
+            cameraController.TiltCamera(isLeft, tiltAmount);
         }
     }
 }

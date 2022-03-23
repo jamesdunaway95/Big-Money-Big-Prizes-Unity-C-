@@ -22,9 +22,8 @@ namespace NoStackDev.BigMoney
         [SerializeField] private float wallJumpForce;
         public bool isWallRunning = false;
 
-        [Header("Camera")]
+        [Header("Camera Settings")]
         [SerializeField] private float tiltAmount;
-        [SerializeField] private float tiltTime;
         [SerializeField] private float fovMultiplier;
         [SerializeField] private float fovTime;
 
@@ -83,15 +82,15 @@ namespace NoStackDev.BigMoney
 
             if (wallLeft)
             {
-                Vector3 wallRunJumpDirection = transform.up + (orientation.forward * 0.25f) + wallLeftHit.normal;
+                Vector3 wallRunJumpDirection = transform.up + wallLeftHit.normal;
                 rb.velocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
-                rb.AddRelativeForce(wallRunJumpDirection * wallJumpForce * (50 + rb.velocity.magnitude * 2), ForceMode.Force);
+                rb.AddRelativeForce(wallRunJumpDirection * wallJumpForce * (50 + rb.velocity.magnitude), ForceMode.Force);
             }
             else if (wallRight)
             {
-                Vector3 wallRunJumpDirection = transform.up + (orientation.forward * 0.25f) + wallRightHit.normal;
+                Vector3 wallRunJumpDirection = transform.up + wallRightHit.normal;
                 rb.velocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
-                rb.AddRelativeForce(wallRunJumpDirection * wallJumpForce * (50 + rb.velocity.magnitude * 2), ForceMode.Force);
+                rb.AddRelativeForce(wallRunJumpDirection * wallJumpForce * (50 + rb.velocity.magnitude), ForceMode.Force);
             }
         }
 
@@ -109,7 +108,7 @@ namespace NoStackDev.BigMoney
             rb.AddForce(Vector3.down * wallRunGravity, ForceMode.Force);
 
             cameraController.UpdateFOV(fovMultiplier, fovTime);
-            cameraController.TiltCamera(wallLeft, tiltAmount, tiltTime);
+            cameraController.TiltCamera(wallLeft, tiltAmount);
         }
 
         private void StopWallRun()
@@ -118,7 +117,6 @@ namespace NoStackDev.BigMoney
             rb.useGravity = true;
 
             cameraController.ResetFOV(fovTime);
-            cameraController.ResetTilt(tiltTime);
         }
     }
 }

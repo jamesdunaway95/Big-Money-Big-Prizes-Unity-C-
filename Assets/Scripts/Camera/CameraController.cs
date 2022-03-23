@@ -12,6 +12,12 @@ namespace NoStackDev.BigMoney
 
         [Header("Camera Tilt")]
         public float currentTilt;
+        public float tiltTime;
+
+        private void Update()
+        {
+            ResetTilt();
+        }
 
         public void UpdateFOV(float fovMultiplier, float fovTime)
         {
@@ -23,7 +29,7 @@ namespace NoStackDev.BigMoney
             normalCamera.fieldOfView = Mathf.Lerp(normalCamera.fieldOfView, baseFov, fovTime * Time.deltaTime);
         }
 
-        public void TiltCamera(bool isLeft, float tiltAmount, float tiltTime)
+        public void TiltCamera(bool isLeft, float tiltAmount)
         {
             if (isLeft)
             {
@@ -35,9 +41,9 @@ namespace NoStackDev.BigMoney
             }
         }
 
-        public void ResetTilt(float tiltTime)
+        private void ResetTilt()
         {
-            if (currentTilt == 0) return;
+            if (currentTilt < 0.01f && currentTilt > -0.01f) return;
 
             currentTilt = Mathf.Lerp(currentTilt, 0, tiltTime * Time.deltaTime);
         }
