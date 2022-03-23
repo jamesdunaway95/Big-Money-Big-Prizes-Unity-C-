@@ -13,15 +13,20 @@ namespace NoStackDev.BigMoney
 
         [Header("Detection")]
         [Tooltip("How far away the wall can be when wall running.")]
-        [SerializeField] private float wallDistance = 0.6f;
+        [SerializeField] private float wallDistance;
         [Tooltip("How high off the ground the player must be to wall run.")]
-        [SerializeField] private float minimumJumpHeight = 1.5f;
+        [SerializeField] private float minimumJumpHeight;
 
         [Header("Wall Running")]
-        [SerializeField] private float wallRunGravity = 1f;
-        [SerializeField] private float wallJumpForce = 12f;
-        [SerializeField] private float wallRunFovMultiplier = 1.2f;
+        [SerializeField] private float wallRunGravity;
+        [SerializeField] private float wallJumpForce;
         public bool isWallRunning = false;
+
+        [Header("Camera")]
+        [SerializeField] private float tiltAmount;
+        [SerializeField] private float tiltTime;
+        [SerializeField] private float fovMultiplier;
+        [SerializeField] private float fovTime;
 
         private bool wallLeft = false;
         private bool wallRight = false;
@@ -78,15 +83,15 @@ namespace NoStackDev.BigMoney
 
             if (wallLeft)
             {
-                Vector3 wallRunJumpDirection = transform.up + (orientation.forward * 0.5f) + wallLeftHit.normal;
+                Vector3 wallRunJumpDirection = transform.up + (orientation.forward * 0.25f) + wallLeftHit.normal;
                 rb.velocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
-                rb.AddRelativeForce(wallRunJumpDirection * wallJumpForce * (75 + rb.velocity.magnitude * 2), ForceMode.Force);
+                rb.AddRelativeForce(wallRunJumpDirection * wallJumpForce * (50 + rb.velocity.magnitude * 2), ForceMode.Force);
             }
             else if (wallRight)
             {
-                Vector3 wallRunJumpDirection = transform.up + (orientation.forward * 0.5f) + wallRightHit.normal;
+                Vector3 wallRunJumpDirection = transform.up + (orientation.forward * 0.25f) + wallRightHit.normal;
                 rb.velocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
-                rb.AddRelativeForce(wallRunJumpDirection * wallJumpForce * (75 + rb.velocity.magnitude * 2), ForceMode.Force);
+                rb.AddRelativeForce(wallRunJumpDirection * wallJumpForce * (50 + rb.velocity.magnitude * 2), ForceMode.Force);
             }
         }
 
@@ -103,8 +108,8 @@ namespace NoStackDev.BigMoney
 
             rb.AddForce(Vector3.down * wallRunGravity, ForceMode.Force);
 
-            cameraController.UpdateFOV(wallRunFovMultiplier);
-            cameraController.TiltCamera(wallLeft);
+            cameraController.UpdateFOV(fovMultiplier, fovTime);
+            cameraController.TiltCamera(wallLeft, tiltAmount, tiltTime);
         }
 
         private void StopWallRun()
@@ -112,8 +117,8 @@ namespace NoStackDev.BigMoney
             isWallRunning = false;
             rb.useGravity = true;
 
-            cameraController.ResetFOV();
-            cameraController.ResetTilt();
+            cameraController.ResetFOV(fovTime);
+            cameraController.ResetTilt(tiltTime);
         }
     }
 }

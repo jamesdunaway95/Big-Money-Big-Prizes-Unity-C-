@@ -6991,7 +6991,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   orientation: {fileID: 1199753521}
-  maxSpeed: 30
+  maxSpeed: 25
   walkSpeed: 6
   sprintSpeed: 10
   speedIncreaseMultiplier: 1.5
@@ -6999,13 +6999,15 @@ MonoBehaviour:
   airMultiplier: 2.75
   jumpForce: 18
   jumpCooldown: 0.25
-  slideSpeed: 25
+  slideSpeed: 20
   slideMultiplier: 1
   isSliding: 0
   crouchSpeed: 4
   reducedHeight: 1
   isCrouching: 0
-  movementInput: {x: 0, y: 0}
+  cameraTilt: 1
+  tiltAmount: 11
+  tiltTime: 2
   state: 0
   velocity: 0
 --- !u!54 &996614720
@@ -7114,11 +7116,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   normalCamera: {fileID: 1007001308}
-  baseFov: 90
-  fovTime: 8
+  baseFov: 80
   currentTilt: 0
-  tiltAmount: 15
-  tiltTime: 5
 --- !u!114 &996614726
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10496,9 +10495,12 @@ MonoBehaviour:
   wallDistance: 1
   minimumJumpHeight: 1.5
   wallRunGravity: 1
-  wallJumpForce: 8
-  wallRunFovMultiplier: 1.2
+  wallJumpForce: 9
   isWallRunning: 0
+  tiltAmount: 12
+  tiltTime: 5
+  fovMultiplier: 1.1
+  fovTime: 8
 --- !u!43 &1583216244
 Mesh:
   m_ObjectHideFlags: 0

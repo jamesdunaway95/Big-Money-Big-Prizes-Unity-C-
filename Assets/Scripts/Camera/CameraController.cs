@@ -7,26 +7,23 @@ namespace NoStackDev.BigMoney
         [SerializeField] private Camera normalCamera;
 
         [Header("Camera FOV")]
-        [SerializeField] private float baseFov = 80f;
-        [SerializeField] private float fovTime = 8f;
+        [SerializeField] private float baseFov;
 
 
         [Header("Camera Tilt")]
-        [HideInInspector] public float currentTilt;
-        [SerializeField] private float tiltAmount = 15f;
-        [SerializeField] private float tiltTime = 5f;
+        public float currentTilt;
 
-        public void UpdateFOV(float fovMultiplier)
+        public void UpdateFOV(float fovMultiplier, float fovTime)
         {
             normalCamera.fieldOfView = Mathf.Lerp(normalCamera.fieldOfView, baseFov * fovMultiplier, fovTime * Time.deltaTime);
         }
 
-        public void ResetFOV()
+        public void ResetFOV(float fovTime)
         {
             normalCamera.fieldOfView = Mathf.Lerp(normalCamera.fieldOfView, baseFov, fovTime * Time.deltaTime);
         }
 
-        public void TiltCamera(bool isLeft)
+        public void TiltCamera(bool isLeft, float tiltAmount, float tiltTime)
         {
             if (isLeft)
             {
@@ -38,8 +35,10 @@ namespace NoStackDev.BigMoney
             }
         }
 
-        public void ResetTilt()
+        public void ResetTilt(float tiltTime)
         {
+            if (currentTilt == 0) return;
+
             currentTilt = Mathf.Lerp(currentTilt, 0, tiltTime * Time.deltaTime);
         }
     }

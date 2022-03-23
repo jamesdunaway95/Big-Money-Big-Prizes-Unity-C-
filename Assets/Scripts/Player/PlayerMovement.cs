@@ -8,15 +8,16 @@ namespace NoStackDev.BigMoney
     public class PlayerMovement : MonoBehaviour
     {
         private Rigidbody rb;
+        private CapsuleCollider capsuleCollider;
         private GroundDetection groundDetection;
         private InputManager inputManager;
-        private CapsuleCollider capsuleCollider;
+        private CameraController cameraController;
 
         [Header("Movement")]
         [SerializeField] private Transform orientation;
-        [SerializeField] private float maxSpeed = 12f;
-        [SerializeField] private float walkSpeed = 7f;
-        [SerializeField] private float sprintSpeed = 10f;
+        [SerializeField] private float maxSpeed;
+        [SerializeField] private float walkSpeed;
+        [SerializeField] private float sprintSpeed;
 
         private float moveSpeed;
         private float desiredMoveSpeed;
@@ -28,13 +29,13 @@ namespace NoStackDev.BigMoney
         public float slopeIncreaseMultipler;
 
         [Header("Jumping / Falling")]
-        [SerializeField] private float airMultiplier = 0.4f;
-        [SerializeField] private float jumpForce = 12f;
+        [SerializeField] private float airMultiplier;
+        [SerializeField] private float jumpForce;
         [SerializeField] private float jumpCooldown;
         private bool readyToJump = true;
 
         [Header("Sliding")]
-        [SerializeField] private float slideSpeed = 25f;
+        [SerializeField] private float slideSpeed;
         [SerializeField] private float slideMultiplier;
         public bool isSliding = false;
 
@@ -44,13 +45,16 @@ namespace NoStackDev.BigMoney
         public bool isCrouching = false;
         private float originalHeight;
 
+        [Header("Camera")]
+        [SerializeField] private bool cameraTilt;
+        [SerializeField] private float tiltAmount;
+        [SerializeField] private float tiltTime;
 
-        [HideInInspector] public Vector2 movementInput;
         private Vector3 moveDirection;
 
         public MovementState state;
 
-        public float velocity;
+        public float velocity; // DEBUG
 
         public enum MovementState
         {
@@ -68,6 +72,7 @@ namespace NoStackDev.BigMoney
             capsuleCollider = GetComponentInChildren<CapsuleCollider>();
             groundDetection = GetComponent<GroundDetection>();
             inputManager = GetComponent<InputManager>();
+            cameraController = GetComponent<CameraController>();
 
             rb.freezeRotation = true;
 
@@ -76,7 +81,7 @@ namespace NoStackDev.BigMoney
 
         private void Update()
         {
-            velocity = rb.velocity.magnitude;
+            velocity = rb.velocity.magnitude; // DEBUG
 
             HandleMovementState();
             LimitVelocity();
@@ -84,6 +89,15 @@ namespace NoStackDev.BigMoney
             if (inputManager.jumpInput && groundDetection.isGrounded && readyToJump) Jump();
             if (inputManager.crouchInput) Crouch();
             if (!inputManager.crouchInput && isCrouching) StopCrouch();
+
+            if (cameraTilt && inputManager.movementInput.x != 0) HandleCamera();
+        }
+
+        private void HandleCamera()
+        {
+            bool isLeft = inputManager.movementInput.x < 0;
+
+            cameraController.TiltCamera(isLeft, tiltAmount, tiltTime);
         }
 
         private void FixedUpdate()
