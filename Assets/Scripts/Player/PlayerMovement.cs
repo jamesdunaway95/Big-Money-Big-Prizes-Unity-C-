@@ -18,6 +18,7 @@ namespace NoStackDev.BigMoney
         [SerializeField] private float maxSpeed;
         [SerializeField] private float walkSpeed;
         [SerializeField] private float sprintSpeed;
+        [SerializeField] private float wallRunSpeed;
 
         private float moveSpeed;
         private float desiredMoveSpeed;
@@ -37,12 +38,10 @@ namespace NoStackDev.BigMoney
         [Header("Sliding")]
         [SerializeField] private float slideSpeed;
         [SerializeField] private float slideMultiplier;
-        public bool isSliding = false;
 
         [Header("Crouching")]
         [SerializeField] private float crouchSpeed;
         [SerializeField] private float reducedHeight;
-        public bool isCrouching = false;
         private float originalHeight;
 
         [Header("Camera Settings")]
@@ -52,6 +51,9 @@ namespace NoStackDev.BigMoney
         private Vector3 moveDirection;
 
         public MovementState state;
+        public bool isCrouching = false;
+        public bool isSliding = false;
+        public bool isWallRunning = false;
 
         public float velocity; // DEBUG
 
@@ -59,6 +61,7 @@ namespace NoStackDev.BigMoney
         {
             walking,
             sprinting,
+            wallRunning,
             crouching,
             sliding,
             air
@@ -114,7 +117,12 @@ namespace NoStackDev.BigMoney
         #region Movement
         private void HandleMovementState()
         {
-            if (isSliding)
+            if (isWallRunning)
+            {
+                state = MovementState.wallRunning;
+                desiredMoveSpeed = wallRunSpeed;
+            }
+            else if (isSliding)
             {
                 state = MovementState.sliding;
 
