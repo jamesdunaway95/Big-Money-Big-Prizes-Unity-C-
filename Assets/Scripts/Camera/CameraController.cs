@@ -11,8 +11,9 @@ namespace NoStackDev.BigMoney
 
 
         [Header("Camera Tilt")]
-        public float currentTilt;
+        public float currentTilt; // Debugging
         public float tiltTime;
+        public float resetTiltTime;
 
         private void Update()
         {
@@ -45,7 +46,7 @@ namespace NoStackDev.BigMoney
         {
             if (currentTilt < 0.01f && currentTilt > -0.01f) return;
 
-            currentTilt = Mathf.Lerp(currentTilt, 0, tiltTime * Time.deltaTime);
+            currentTilt = Mathf.Lerp(currentTilt, 0, resetTiltTime * Time.deltaTime);
         }
     }
 }

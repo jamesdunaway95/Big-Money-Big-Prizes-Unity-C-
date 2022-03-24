@@ -40,7 +40,7 @@ namespace NoStackDev.BigMoney
         private void Update()
         {
             if (inputManager.slideInput && inputManager.movementInput != Vector2.zero 
-                && readyToSlide && !playerMovement.isSliding)
+                && readyToSlide && !playerMovement.isSliding && groundDetection.isGrounded)
             {
                 StartSlide();
             }

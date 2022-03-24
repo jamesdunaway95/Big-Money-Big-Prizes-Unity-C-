@@ -11,12 +11,12 @@ namespace NoStackDev.BigMoney
 
         [Header("Camera Look")]
         [SerializeField] private Transform normalCamera;
-        [SerializeField] private float xSensitivity = 10f;
-        [SerializeField] private float ySensitivity = 10f;
+        [SerializeField] private float xSensitivity;
+        [SerializeField] private float ySensitivity;
         [SerializeField] private bool invertY = false;
 
-        [SerializeField] private float maxLookAngle = -90f;
-        [SerializeField] private float minLookAngle = 80f;
+        [SerializeField] [Range(-50f, -90f)] private float maxLookAngle;
+        [SerializeField] [Range(50f, 80f)] private float minLookAngle;
 
         [Header("Camera Tilt")]
         [SerializeField] private bool enableTilt;

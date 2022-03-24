@@ -1,23 +1,23 @@
 using UnityEngine;
-using UnityEngine.Events;
+using UnityEngine.InputSystem;
 
 namespace NoStackDev.BigMoney
 {
     public class InputManager : MonoBehaviour
     {
-        // Components
+        [Header("References")]
         private PlayerControls playerControls;
 
-        public Vector2 movementInput;
-        public Vector2 lookInput;
+        [Header("Vector Inputs")]
+        [HideInInspector] public Vector2 movementInput;
+        [HideInInspector] public Vector2 lookInput;
 
+        [Header("Input Bools")]
         public bool sprintInput;
         public bool jumpInput;
         public bool wallJumpInput;
         public bool crouchInput;
         public bool slideInput;
-
-        // public UnityEvent slideInput;
 
         private void OnEnable()
         {

@@ -17,12 +17,10 @@ namespace NoStackDev.BigMoney
 
         [Header("Wall Running")]
         [SerializeField] private float wallRunForce;
+        [SerializeField] private float wallClimbSpeed;
         [SerializeField] private float maxWallRunTime;
-        [SerializeField] private float wallRunGravity;
         [SerializeField] private float wallJumpForce;
         //private float wallRunTimer;
-        private float horizontalInput;
-        private float verticalInput;
 
         [Header("Wall Detection")]
         [SerializeField] private float wallCheckDistance;
@@ -72,11 +70,8 @@ namespace NoStackDev.BigMoney
 
         private void StateMachine()
         {
-            horizontalInput = inputManager.movementInput.x;
-            verticalInput = inputManager.movementInput.y;
-
             // State 1 - Wall Running
-            if ((wallLeft || wallRight) && verticalInput > 0 && AboveGround())
+            if ((wallLeft || wallRight) && inputManager.movementInput.y > 0 && AboveGround())
             {
                 if (!playerMovement.isWallRunning)
                     StartWallRun();
@@ -98,20 +93,24 @@ namespace NoStackDev.BigMoney
         private void WallRunningMovement()
         {
             rb.useGravity = false;
-            rb.velocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
 
             cameraController.TiltCamera(wallLeft, tiltAmount);
 
             Vector3 wallNormal = wallRight ? rightWallHit.normal : leftWallHit.normal;
             Vector3 wallForward = Vector3.Cross(wallNormal, transform.up);
 
+            // Wall run in direction the player is facing
             if ((orientation.forward - wallForward).magnitude > (orientation.forward - -wallForward).magnitude)
                 wallForward = -wallForward;
 
+            // Forwards force
             rb.AddForce(wallForward * wallRunForce, ForceMode.Force);
-            rb.AddForce(Vector3.down * wallRunGravity, ForceMode.Force);
 
-            if (!(wallLeft && horizontalInput > 0) && !(wallRight && horizontalInput < 0))
+            // Upwards force (wall climbing)
+            if (inputManager.sprintInput)
+                rb.velocity = new Vector3(rb.velocity.x, wallClimbSpeed, rb.velocity.z);
+
+            if (!(wallLeft && inputManager.movementInput.x > 0) && !(wallRight && inputManager.movementInput.x < 0))
                 rb.AddForce(-wallNormal * 10f, ForceMode.Force);
         }
 

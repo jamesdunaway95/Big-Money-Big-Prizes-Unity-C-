@@ -660,10 +660,8 @@ MonoBehaviour:
   m_Mesh: {fileID: 390184332}
   m_IsSelectable: 1
   m_SelectedFaces: 
-  m_SelectedEdges:
-  - a: 47
-    b: 46
-  m_SelectedVertices: 2f0000002e000000
+  m_SelectedEdges: []
+  m_SelectedVertices: 
 --- !u!4 &18393349
 Transform:
   m_ObjectHideFlags: 0
@@ -3927,58 +3925,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 3428696730144911377, guid: cbf9daba979028242b688453a8eeec0c, type: 3}
-      propertyPath: tiltAmount
-      value: 35
-      objectReference: {fileID: 0}
-    - target: {fileID: 3428696730144911377, guid: cbf9daba979028242b688453a8eeec0c, type: 3}
-      propertyPath: orientation
-      value: 
-      objectReference: {fileID: 372318852}
-    - target: {fileID: 3428696730144911377, guid: cbf9daba979028242b688453a8eeec0c, type: 3}
-      propertyPath: wallRunForce
-      value: 12
-      objectReference: {fileID: 0}
-    - target: {fileID: 3428696730144911377, guid: cbf9daba979028242b688453a8eeec0c, type: 3}
-      propertyPath: minJumpHeight
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 3428696730144911377, guid: cbf9daba979028242b688453a8eeec0c, type: 3}
-      propertyPath: wallJumpForce
-      value: 13.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 3428696730144911377, guid: cbf9daba979028242b688453a8eeec0c, type: 3}
-      propertyPath: maxWallRunTime
-      value: 1.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 3428696730144911377, guid: cbf9daba979028242b688453a8eeec0c, type: 3}
-      propertyPath: wallRunGravity
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 3428696730144911377, guid: cbf9daba979028242b688453a8eeec0c, type: 3}
-      propertyPath: wallLayer.m_Bits
-      value: 64
-      objectReference: {fileID: 0}
-    - target: {fileID: 3428696730144911377, guid: cbf9daba979028242b688453a8eeec0c, type: 3}
-      propertyPath: wallCheckDistance
-      value: 0.7
-      objectReference: {fileID: 0}
-    - target: {fileID: 3428696730144911377, guid: cbf9daba979028242b688453a8eeec0c, type: 3}
-      propertyPath: groundLayer.m_Bits
-      value: 8
-      objectReference: {fileID: 0}
-    - target: {fileID: 3428696731778181640, guid: cbf9daba979028242b688453a8eeec0c, type: 3}
-      propertyPath: tiltTime
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 3428696731778181640, guid: cbf9daba979028242b688453a8eeec0c, type: 3}
       propertyPath: normalCamera
       value: 
       objectReference: {fileID: 1007001308}
-    - target: {fileID: 3428696731778181642, guid: cbf9daba979028242b688453a8eeec0c, type: 3}
-      propertyPath: slideCooldown
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 3428696731778181644, guid: cbf9daba979028242b688453a8eeec0c, type: 3}
       propertyPath: m_RootOrder
       value: 4
@@ -4028,16 +3978,16 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1007001305}
     - target: {fileID: 3428696731778181746, guid: cbf9daba979028242b688453a8eeec0c, type: 3}
-      propertyPath: tiltAmount
-      value: 3
+      propertyPath: jumpForce
+      value: 16
       objectReference: {fileID: 0}
     - target: {fileID: 3428696731778181746, guid: cbf9daba979028242b688453a8eeec0c, type: 3}
-      propertyPath: orientation
-      value: 
-      objectReference: {fileID: 372318852}
+      propertyPath: sprintSpeed
+      value: 9
+      objectReference: {fileID: 0}
     - target: {fileID: 3428696731778181746, guid: cbf9daba979028242b688453a8eeec0c, type: 3}
       propertyPath: wallRunSpeed
-      value: 8
+      value: 7.5
       objectReference: {fileID: 0}
     - target: {fileID: 3428696731778181747, guid: cbf9daba979028242b688453a8eeec0c, type: 3}
       propertyPath: m_Name
@@ -4045,11 +3995,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: cbf9daba979028242b688453a8eeec0c, type: 3}
---- !u!4 &372318852 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 3428696729976537468, guid: cbf9daba979028242b688453a8eeec0c, type: 3}
-  m_PrefabInstance: {fileID: 372318851}
-  m_PrefabAsset: {fileID: 0}
 --- !u!43 &389601408
 Mesh:
   m_ObjectHideFlags: 0
@@ -8770,7 +8715,7 @@ GameObject:
   - component: {fileID: 1010654366}
   - component: {fileID: 1010654365}
   - component: {fileID: 1010654364}
-  m_Layer: 6
+  m_Layer: 3
   m_Name: Cube (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -10417,7 +10362,7 @@ GameObject:
   - component: {fileID: 1360668642}
   - component: {fileID: 1360668641}
   - component: {fileID: 1360668640}
-  m_Layer: 6
+  m_Layer: 3
   m_Name: Cube (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -10894,7 +10839,7 @@ GameObject:
   - component: {fileID: 1382061481}
   - component: {fileID: 1382061480}
   - component: {fileID: 1382061479}
-  m_Layer: 6
+  m_Layer: 3
   m_Name: Cube
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -18925,7 +18870,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1948902835}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: ENVIRONMENT
   m_TagString: Untagged
   m_Icon: {fileID: 0}

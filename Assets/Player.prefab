@@ -230,8 +230,8 @@ MonoBehaviour:
   normalCamera: {fileID: 0}
   baseFov: 80
   currentTilt: 5
-  tiltTime: 10
-  isTilted: 0
+  tiltTime: 2
+  resetTiltTime: 5
 --- !u!114 &3428696731778181647
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -308,21 +308,23 @@ MonoBehaviour:
   orientation: {fileID: 3428696729976537468}
   maxSpeed: 25
   walkSpeed: 6
-  sprintSpeed: 10
+  sprintSpeed: 9
+  wallRunSpeed: 7.5
   speedIncreaseMultiplier: 1.5
   slopeIncreaseMultipler: 2.5
   airMultiplier: 1.5
-  jumpForce: 18
+  jumpForce: 16
   jumpCooldown: 0.25
   slideSpeed: 20
   slideMultiplier: 1
-  isSliding: 0
   crouchSpeed: 4
   reducedHeight: 1
-  isCrouching: 0
   cameraTilt: 1
-  tiltAmount: 4
+  tiltAmount: 3
   state: 0
+  isCrouching: 0
+  isSliding: 0
+  isWallRunning: 0
   velocity: 0
 --- !u!114 &3428696731778181643
 MonoBehaviour:
@@ -351,14 +353,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   orientation: {fileID: 3428696729976537468}
-  wallDistance: 1
-  minimumJumpHeight: 1.5
-  wallRunGravity: 1
-  wallJumpForce: 9
-  isWallRunning: 0
-  tiltAmount: 12
-  fovMultiplier: 1.1
-  fovTime: 8
+  wallLayer:
+    serializedVersion: 2
+    m_Bits: 72
+  groundLayer:
+    serializedVersion: 2
+    m_Bits: 8
+  wallRunForce: 12
+  wallClimbSpeed: 1.5
+  maxWallRunTime: 1.5
+  wallJumpForce: 13.5
+  wallCheckDistance: 0.7
+  minJumpHeight: 2
+  tiltAmount: 25
+  fovMultiplier: 1.2
+  fovTime: 20
 --- !u!114 &3428696731778181642
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -374,7 +383,7 @@ MonoBehaviour:
   orientation: {fileID: 3428696729976537468}
   maxSlideTime: 0.4
   slideForce: 2
-  slideCooldown: 0.5
+  slideCooldown: 1
 --- !u!1 &3428696731783882724
 GameObject:
   m_ObjectHideFlags: 0
