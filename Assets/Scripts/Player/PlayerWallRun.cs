@@ -92,8 +92,6 @@ namespace NoStackDev.BigMoney
 
         private void WallRunningMovement()
         {
-            rb.useGravity = false;
-
             cameraController.TiltCamera(wallLeft, tiltAmount);
 
             Vector3 wallNormal = wallRight ? rightWallHit.normal : leftWallHit.normal;

@@ -1,4 +1,3 @@
-using System.Collections;
 using UnityEngine;
 
 namespace NoStackDev.BigMoney
@@ -9,8 +8,8 @@ namespace NoStackDev.BigMoney
     public class PlayerSlide : MonoBehaviour
     {
         private Rigidbody rb;
-        private CapsuleCollider cCollider;
-        private InputManager inputManager; // Testing
+        private CapsuleCollider capsuleCollider;
+        private InputManager inputManager;
         private PlayerMovement playerMovement;
         private GroundDetection groundDetection;
         [SerializeField] private Transform orientation;
@@ -29,18 +28,27 @@ namespace NoStackDev.BigMoney
         private void Awake()
         {
             rb = GetComponent<Rigidbody>();
-            cCollider = GetComponentInChildren<CapsuleCollider>();
+            capsuleCollider = GetComponent<CapsuleCollider>();
             inputManager = GetComponent<InputManager>();
             playerMovement = GetComponent<PlayerMovement>();
             groundDetection = GetComponent<GroundDetection>();
 
-            originalHeight = cCollider.height;
+            originalHeight = capsuleCollider.height;
         }
 
         private void Update()
         {
+            // Crouching
+            if (inputManager.crouchInput && !playerMovement.isSliding && groundDetection.isGrounded)
+            {
+                Crouch();
+            }
+
+            if (!inputManager.crouchInput && !inputManager.slideInput && playerMovement.isCrouching) StopCrouch();
+
+            // Sliding
             if (inputManager.slideInput && inputManager.movementInput != Vector2.zero 
-                && readyToSlide && !playerMovement.isSliding && groundDetection.isGrounded)
+                && readyToSlide && !playerMovement.isSliding && !playerMovement.isCrouching && groundDetection.isGrounded)
             {
                 StartSlide();
             }
@@ -59,11 +67,12 @@ namespace NoStackDev.BigMoney
             }
         }
 
+        #region Sliding
         private void StartSlide()
         {
             playerMovement.isSliding = true;
 
-            cCollider.height = reducedHeight;
+            capsuleCollider.height = reducedHeight;
             transform.localScale = new Vector3(transform.localScale.x, reducedHeight * 0.5f, transform.localScale.z); // Only temporary until a model and animation is added.
 
             rb.AddRelativeForce(Vector3.down * 2f, ForceMode.Impulse);
@@ -94,9 +103,22 @@ namespace NoStackDev.BigMoney
 
         private void StopSlide()
         {
+            if (inputManager.slideInput)
+            {
+                playerMovement.isSliding = false;
+
+                readyToSlide = false;
+
+                Invoke(nameof(ResetSlide), slideCooldown);
+
+                Crouch();
+
+                return;
+            }
+
             playerMovement.isSliding = false;
 
-            cCollider.height = originalHeight;
+            capsuleCollider.height = originalHeight;
             transform.localScale = new Vector3(transform.localScale.x, originalHeight * 0.5f, transform.localScale.z); // Only temporary until a model and animation is added.
 
             readyToSlide = false;
@@ -108,5 +130,26 @@ namespace NoStackDev.BigMoney
         {
             readyToSlide = true;
         }
+        #endregion
+
+        #region Crouching
+        private void Crouch()
+        {
+            playerMovement.isCrouching = true;
+
+            capsuleCollider.height = reducedHeight;
+            transform.localScale = new Vector3(transform.localScale.x, reducedHeight * 0.5f, transform.localScale.z); // Only temporary until a model and animation is added.
+
+            rb.AddRelativeForce(Vector3.down * 5f, ForceMode.Force);
+        }
+
+        private void StopCrouch()
+        {
+            playerMovement.isCrouching = false;
+
+            capsuleCollider.height = originalHeight;
+            transform.localScale = new Vector3(transform.localScale.x, originalHeight * 0.5f, transform.localScale.z); // Only temporary until a model and animation is added.
+        }
+        #endregion
     }
 }

@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1661865738800443224}
-  - component: {fileID: 1661865738800443207}
+  - component: {fileID: 1248007972033936527}
   m_Layer: 0
   m_Name: CameraHolder
   m_TagString: Untagged
@@ -32,7 +32,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1661865738800443207
+--- !u!114 &1248007972033936527
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -41,10 +41,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 1661865738800443206}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 15e13ec25b182d64aa1011f912a0f44c, type: 3}
+  m_Script: {fileID: 11500000, guid: 295dcc40493b5694fb57da92eb4fc336, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cameraFollow: {fileID: 0}
+  followTarget: {fileID: 0}
 --- !u!1 &1661865740282271760
 GameObject:
   m_ObjectHideFlags: 0
@@ -58,7 +58,7 @@ GameObject:
   - component: {fileID: 1661865740282271763}
   - component: {fileID: 1661865740282271762}
   m_Layer: 0
-  m_Name: Camera
+  m_Name: NormalCamera
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

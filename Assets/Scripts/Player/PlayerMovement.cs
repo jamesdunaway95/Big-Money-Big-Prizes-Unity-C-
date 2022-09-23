@@ -67,11 +67,10 @@ namespace NoStackDev.BigMoney
             air
         }
 
-
         private void Awake()
         {
             rb = GetComponent<Rigidbody>();
-            capsuleCollider = GetComponentInChildren<CapsuleCollider>();
+            capsuleCollider = GetComponent<CapsuleCollider>();
             groundDetection = GetComponent<GroundDetection>();
             inputManager = GetComponent<InputManager>();
             cameraController = GetComponent<CameraController>();
@@ -91,10 +90,6 @@ namespace NoStackDev.BigMoney
 
             // Jumping
             if (inputManager.jumpInput && groundDetection.isGrounded && readyToJump) Jump();
-
-            // Crouching
-            if (inputManager.crouchInput) Crouch();
-            if (!inputManager.crouchInput && isCrouching) StopCrouch();
 
             // Camera
             if (cameraTilt && inputManager.movementInput.x != 0) HandleCamera();
@@ -250,26 +245,6 @@ namespace NoStackDev.BigMoney
         private void ResetJump()
         {
             readyToJump = true;
-        }
-        #endregion
-
-        #region Crouching
-        private void Crouch()
-        {
-            isCrouching = true;
-
-            capsuleCollider.height = reducedHeight;
-            transform.localScale = new Vector3(transform.localScale.x, reducedHeight * 0.5f, transform.localScale.z); // Only temporary until a model and animation is added.
-
-            rb.AddRelativeForce(Vector3.down * 5f, ForceMode.Force);
-        }
-
-        private void StopCrouch()
-        {
-            isCrouching = false;
-
-            capsuleCollider.height = originalHeight;
-            transform.localScale = new Vector3(transform.localScale.x, originalHeight * 0.5f, transform.localScale.z); // Only temporary until a model and animation is added.
         }
         #endregion
     }

@@ -73,3 +73,9 @@ crashlytics-build.properties
 Assets/Settings/
 Assets/ThirdParty/
 Assets/Materials/
+Assets/Textures/
+Assets/Textures.meta
+Assets/UniversalRenderPipelineGlobalSettings.asset
+Assets/UniversalRenderPipelineGlobalSettings.asset.meta
+Assets/Art/grass_clear_albedo 1.png
+Assets/Art/grass_clear_albedo 1.png.meta
