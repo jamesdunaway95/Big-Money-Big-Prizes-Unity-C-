@@ -19,6 +19,7 @@ namespace NoStackDev.BigMoney
         [SerializeField] private float walkSpeed;
         [SerializeField] private float sprintSpeed;
         [SerializeField] private float wallRunSpeed;
+        [SerializeField] private float climbSpeed;
 
         private float moveSpeed;
         private float desiredMoveSpeed;
@@ -54,6 +55,7 @@ namespace NoStackDev.BigMoney
         public bool isCrouching = false;
         public bool isSliding = false;
         public bool isWallRunning = false;
+        public bool isClimbing = false;
 
         public float velocity; // DEBUG
 
@@ -62,6 +64,7 @@ namespace NoStackDev.BigMoney
             walking,
             sprinting,
             wallRunning,
+            climbing,
             crouching,
             sliding,
             air
@@ -112,7 +115,13 @@ namespace NoStackDev.BigMoney
         #region Movement
         private void HandleMovementState()
         {
-            if (isWallRunning)
+            if (isClimbing)
+            {
+                state = MovementState.climbing;
+                desiredMoveSpeed = climbSpeed;
+            }
+
+            else if (isWallRunning)
             {
                 state = MovementState.wallRunning;
                 desiredMoveSpeed = wallRunSpeed;
