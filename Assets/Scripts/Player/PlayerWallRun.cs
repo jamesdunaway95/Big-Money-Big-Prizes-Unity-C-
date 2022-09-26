@@ -19,8 +19,11 @@ namespace NoStackDev.BigMoney
         [SerializeField] private float wallRunForce;
         [SerializeField] private float wallClimbSpeed;
         [SerializeField] private float maxWallRunTime;
-        [SerializeField] private float wallJumpForce;
-        //private float wallRunTimer;
+        private float wallRunTimer;
+
+        [Header("Wall Jumping")]
+        [SerializeField] private float wallJumpUpForce;
+        [SerializeField] private float wallJumpSideForce;
 
         [Header("Wall Detection")]
         [SerializeField] private float wallCheckDistance;
@@ -29,6 +32,15 @@ namespace NoStackDev.BigMoney
         private RaycastHit rightWallHit;
         private bool wallLeft;
         private bool wallRight;
+
+        [Header("Exiting Wall")]
+        [SerializeField] private bool exitingWall;
+        [SerializeField] private float exitWallTime;
+        private float exitWallTimer;
+
+        [Header("Gravity")]
+        [SerializeField] private bool useGravity;
+        [SerializeField] private float gravityCounterForce;
 
         [Header("Camera Settings")]
         [SerializeField] private float tiltAmount;
@@ -48,8 +60,6 @@ namespace NoStackDev.BigMoney
         {
             CheckForWall();
             StateMachine();
-
-            if (inputManager.wallJumpInput) Jump();
         }
 
         private void FixedUpdate()
@@ -71,10 +81,42 @@ namespace NoStackDev.BigMoney
         private void StateMachine()
         {
             // State 1 - Wall Running
-            if ((wallLeft || wallRight) && inputManager.movementInput.y > 0 && AboveGround())
+            if ((wallLeft || wallRight) && inputManager.movementInput.y > 0 && AboveGround() && !exitingWall)
             {
                 if (!playerMovement.isWallRunning)
                     StartWallRun();
+
+                // Wallrun timer
+                if (wallRunTimer > 0)
+                {
+                    wallRunTimer -= Time.deltaTime;
+                }
+
+                if (wallRunTimer <= 0 && playerMovement.isWallRunning)
+                {
+                    exitingWall = true;
+                    exitWallTimer = exitWallTime;
+                }
+
+                // Wall jump
+                if (inputManager.jumpInput) WallJump();
+            }
+            else if (exitingWall)
+            {
+                if (playerMovement.isWallRunning)
+                {
+                    StopWallRun();
+                }
+
+                if (exitWallTimer > 0)
+                {
+                    exitWallTimer -= Time.deltaTime;
+                }
+
+                if (exitWallTimer <= 0)
+                {
+                    exitingWall = false;
+                }
             }
             else
             {
@@ -87,12 +129,18 @@ namespace NoStackDev.BigMoney
         {
             playerMovement.isWallRunning = true;
 
+            wallRunTimer = maxWallRunTime;
+
+            rb.velocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
+
             cameraController.UpdateFOV(fovMultiplier, fovTime);
         }
 
         private void WallRunningMovement()
         {
             cameraController.TiltCamera(wallLeft, tiltAmount);
+
+            rb.useGravity = useGravity;
 
             Vector3 wallNormal = wallRight ? rightWallHit.normal : leftWallHit.normal;
             Vector3 wallForward = Vector3.Cross(wallNormal, transform.up);
@@ -108,8 +156,14 @@ namespace NoStackDev.BigMoney
             if (inputManager.sprintInput)
                 rb.velocity = new Vector3(rb.velocity.x, wallClimbSpeed, rb.velocity.z);
 
+            // Push to wall force
             if (!(wallLeft && inputManager.movementInput.x > 0) && !(wallRight && inputManager.movementInput.x < 0))
                 rb.AddForce(-wallNormal * 10f, ForceMode.Force);
+
+            if (useGravity && !exitingWall)
+            {
+                rb.AddForce(transform.up * gravityCounterForce, ForceMode.Force);
+            }
         }
 
         private void StopWallRun()
@@ -119,23 +173,19 @@ namespace NoStackDev.BigMoney
             cameraController.ResetFOV(fovTime);
         }
 
-        private void Jump()
+        private void WallJump()
         {
-            if (!playerMovement.isWallRunning) return;
+            // Enter exiting wall state
+            exitingWall = true;
+            exitWallTimer = exitWallTime;
 
-            if (wallLeft)
-            {
-                Vector3 wallRunJumpDirection = transform.up + leftWallHit.normal;
-                rb.velocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
-                rb.AddForce(wallRunJumpDirection * wallJumpForce * (50 + rb.velocity.magnitude), ForceMode.Force);
-            }
-            else if (wallRight)
-            {
-                Vector3 wallRunJumpDirection = transform.up + rightWallHit.normal;
-                rb.velocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
-                rb.AddForce(wallRunJumpDirection * wallJumpForce * (50 + rb.velocity.magnitude), ForceMode.Force);
-            }
+            Vector3 wallNormal = wallRight ? rightWallHit.normal : leftWallHit.normal;
+
+            Vector3 foreceToApply = transform.up * wallJumpUpForce + wallNormal * wallJumpSideForce;
+
+            // Reset Y Velocity and Add force
+            rb.velocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
+            rb.AddForce(foreceToApply, ForceMode.Impulse);
         }
-
     }
 }

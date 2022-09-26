@@ -1884,7 +1884,7 @@ GameObject:
   - component: {fileID: 45497008}
   - component: {fileID: 45497007}
   - component: {fileID: 45497006}
-  m_Layer: 10
+  m_Layer: 3
   m_Name: Platform
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9259,7 +9259,7 @@ GameObject:
   - component: {fileID: 215513315}
   - component: {fileID: 215513314}
   - component: {fileID: 215513313}
-  m_Layer: 6
+  m_Layer: 3
   m_Name: Tower (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -12251,7 +12251,7 @@ GameObject:
   - component: {fileID: 260526302}
   - component: {fileID: 260526301}
   - component: {fileID: 260526300}
-  m_Layer: 6
+  m_Layer: 3
   m_Name: Platform (21)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -14407,7 +14407,7 @@ GameObject:
   - component: {fileID: 279340021}
   - component: {fileID: 279340020}
   - component: {fileID: 279340019}
-  m_Layer: 6
+  m_Layer: 3
   m_Name: Platform (28)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -16211,7 +16211,7 @@ GameObject:
   - component: {fileID: 317963358}
   - component: {fileID: 317963357}
   - component: {fileID: 317963356}
-  m_Layer: 10
+  m_Layer: 3
   m_Name: Platform (32)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -19396,7 +19396,7 @@ GameObject:
   - component: {fileID: 411215284}
   - component: {fileID: 411215283}
   - component: {fileID: 411215282}
-  m_Layer: 6
+  m_Layer: 3
   m_Name: Tower (8)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -20028,7 +20028,7 @@ GameObject:
   - component: {fileID: 418432691}
   - component: {fileID: 418432690}
   - component: {fileID: 418432689}
-  m_Layer: 6
+  m_Layer: 3
   m_Name: Tower (11)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -22729,7 +22729,7 @@ GameObject:
   - component: {fileID: 570619080}
   - component: {fileID: 570619079}
   - component: {fileID: 570619078}
-  m_Layer: 6
+  m_Layer: 3
   m_Name: Platform (25)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -23354,7 +23354,7 @@ GameObject:
   - component: {fileID: 578887869}
   - component: {fileID: 578887868}
   - component: {fileID: 578887867}
-  m_Layer: 6
+  m_Layer: 3
   m_Name: Tower (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -29892,7 +29892,7 @@ GameObject:
   - component: {fileID: 749763608}
   - component: {fileID: 749763607}
   - component: {fileID: 749763606}
-  m_Layer: 6
+  m_Layer: 3
   m_Name: Tower (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -30492,7 +30492,7 @@ GameObject:
   - component: {fileID: 765042276}
   - component: {fileID: 765042275}
   - component: {fileID: 765042274}
-  m_Layer: 6
+  m_Layer: 3
   m_Name: Tower (9)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -31652,7 +31652,7 @@ GameObject:
   - component: {fileID: 814516515}
   - component: {fileID: 814516514}
   - component: {fileID: 814516513}
-  m_Layer: 6
+  m_Layer: 3
   m_Name: Platform (27)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -32808,7 +32808,7 @@ GameObject:
   - component: {fileID: 854385122}
   - component: {fileID: 854385121}
   - component: {fileID: 854385120}
-  m_Layer: 10
+  m_Layer: 3
   m_Name: Platform (30)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -33148,7 +33148,7 @@ GameObject:
   - component: {fileID: 856355310}
   - component: {fileID: 856355309}
   - component: {fileID: 856355308}
-  m_Layer: 10
+  m_Layer: 3
   m_Name: Plane
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -37349,7 +37349,7 @@ GameObject:
   - component: {fileID: 864682643}
   - component: {fileID: 864682642}
   - component: {fileID: 864682641}
-  m_Layer: 10
+  m_Layer: 3
   m_Name: Platform (31)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -37689,7 +37689,7 @@ GameObject:
   - component: {fileID: 865796711}
   - component: {fileID: 865796710}
   - component: {fileID: 865796709}
-  m_Layer: 6
+  m_Layer: 3
   m_Name: Tower (14)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -38005,7 +38005,7 @@ GameObject:
   - component: {fileID: 877338517}
   - component: {fileID: 877338516}
   - component: {fileID: 877338515}
-  m_Layer: 6
+  m_Layer: 3
   m_Name: Platform (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -43111,7 +43111,7 @@ GameObject:
   - component: {fileID: 967200499}
   - component: {fileID: 967200498}
   - component: {fileID: 967200497}
-  m_Layer: 6
+  m_Layer: 3
   m_Name: Platform (29)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -43951,7 +43951,7 @@ GameObject:
   - component: {fileID: 1003785003}
   - component: {fileID: 1003785002}
   - component: {fileID: 1003785001}
-  m_Layer: 6
+  m_Layer: 3
   m_Name: Platform (24)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -49112,7 +49112,7 @@ GameObject:
   - component: {fileID: 1191997548}
   - component: {fileID: 1191997547}
   - component: {fileID: 1191997546}
-  m_Layer: 6
+  m_Layer: 3
   m_Name: Tower
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -50728,7 +50728,7 @@ GameObject:
   - component: {fileID: 1260817962}
   - component: {fileID: 1260817961}
   - component: {fileID: 1260817960}
-  m_Layer: 6
+  m_Layer: 3
   m_Name: Platform (20)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -55590,7 +55590,7 @@ GameObject:
   - component: {fileID: 1449609960}
   - component: {fileID: 1449609959}
   - component: {fileID: 1449609958}
-  m_Layer: 6
+  m_Layer: 3
   m_Name: Tower (4)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -59122,7 +59122,7 @@ GameObject:
   - component: {fileID: 1517323723}
   - component: {fileID: 1517323722}
   - component: {fileID: 1517323721}
-  m_Layer: 6
+  m_Layer: 3
   m_Name: Tower (7)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -59487,6 +59487,18 @@ PrefabInstance:
     - target: {fileID: 5960618236324691830, guid: cbf9daba979028242b688453a8eeec0c, type: 3}
       propertyPath: m_Name
       value: Player
+      objectReference: {fileID: 0}
+    - target: {fileID: 5960618238024082708, guid: cbf9daba979028242b688453a8eeec0c, type: 3}
+      propertyPath: wallClimbSpeed
+      value: 1.3
+      objectReference: {fileID: 0}
+    - target: {fileID: 5960618238024082708, guid: cbf9daba979028242b688453a8eeec0c, type: 3}
+      propertyPath: wallJumpUpForce
+      value: 1.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 5960618238024082708, guid: cbf9daba979028242b688453a8eeec0c, type: 3}
+      propertyPath: wallJumpSideForce
+      value: 0.4
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: cbf9daba979028242b688453a8eeec0c, type: 3}
@@ -69826,7 +69838,7 @@ GameObject:
   - component: {fileID: 1852669449}
   - component: {fileID: 1852669448}
   - component: {fileID: 1852669447}
-  m_Layer: 6
+  m_Layer: 3
   m_Name: Tower (6)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -70799,7 +70811,7 @@ GameObject:
   - component: {fileID: 1864145114}
   - component: {fileID: 1864145113}
   - component: {fileID: 1864145112}
-  m_Layer: 9
+  m_Layer: 6
   m_Name: Pipe
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -84574,7 +84586,7 @@ GameObject:
   - component: {fileID: 1954118122}
   - component: {fileID: 1954118121}
   - component: {fileID: 1954118120}
-  m_Layer: 6
+  m_Layer: 3
   m_Name: Platform (26)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -87333,7 +87345,7 @@ GameObject:
   - component: {fileID: 2002850473}
   - component: {fileID: 2002850472}
   - component: {fileID: 2002850471}
-  m_Layer: 6
+  m_Layer: 3
   m_Name: Tower (12)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -89581,7 +89593,7 @@ GameObject:
   - component: {fileID: 2050205920}
   - component: {fileID: 2050205919}
   - component: {fileID: 2050205918}
-  m_Layer: 6
+  m_Layer: 3
   m_Name: Tower (10)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -93331,7 +93343,7 @@ GameObject:
   - component: {fileID: 2092224620}
   - component: {fileID: 2092224619}
   - component: {fileID: 2092224618}
-  m_Layer: 6
+  m_Layer: 3
   m_Name: Platform (23)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -96652,7 +96664,7 @@ GameObject:
   - component: {fileID: 7234151728781420837}
   - component: {fileID: 7234151728781420843}
   - component: {fileID: 7234151728781420842}
-  m_Layer: 9
+  m_Layer: 5
   m_Name: Text - Speed
   m_TagString: Untagged
   m_Icon: {fileID: 0}

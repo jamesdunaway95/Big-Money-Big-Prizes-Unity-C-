@@ -89,7 +89,7 @@ namespace NoStackDev.BigMoney
             LimitVelocity();
 
             // Jumping
-            if (inputManager.jumpInput && groundDetection.isGrounded && readyToJump) Jump();
+            if (inputManager.jumpInput && groundDetection.isGrounded && readyToJump && !isWallRunning) Jump();
 
             // Camera
             if (cameraTilt && inputManager.movementInput.x != 0) HandleCamera();
@@ -104,7 +104,7 @@ namespace NoStackDev.BigMoney
 
         private void FixedUpdate()
         {
-            rb.useGravity = !groundDetection.OnSlope();
+            // rb.useGravity = !groundDetection.OnSlope();
 
             HandleMovement();
         }
@@ -179,6 +179,8 @@ namespace NoStackDev.BigMoney
             {
                 rb.AddRelativeForce(moveDirection.normalized * moveSpeed * airMultiplier, ForceMode.Force);
             }
+
+            if (!isWallRunning) rb.useGravity = !groundDetection.OnSlope();
         }
 
         private void LimitVelocity()
