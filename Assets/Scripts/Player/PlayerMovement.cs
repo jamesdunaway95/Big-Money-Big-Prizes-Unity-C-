@@ -56,6 +56,7 @@ namespace NoStackDev.BigMoney
         public bool isSliding = false;
         public bool isWallRunning = false;
         public bool isClimbing = false;
+        public bool isExitingWallClimb;
 
         public float velocity; // DEBUG
 
@@ -174,16 +175,22 @@ namespace NoStackDev.BigMoney
 
         private void HandleMovement()
         {
+            if (isExitingWallClimb) return;
+                
+            // Calculate movement direction
             moveDirection = orientation.forward * inputManager.movementInput.y + orientation.right * inputManager.movementInput.x;
 
+            // On slope
             if (groundDetection.OnSlope())
             {
                 rb.AddRelativeForce(groundDetection.GetSlopeMoveDirection(moveDirection) * moveSpeed * 7f, ForceMode.Force);
             }
+            // On ground
             else if (groundDetection.isGrounded)
             {
                 rb.AddRelativeForce(moveDirection.normalized * moveSpeed * 10f, ForceMode.Force);
             }
+            // In air
             else if (!groundDetection.isGrounded)
             {
                 rb.AddRelativeForce(moveDirection.normalized * moveSpeed * airMultiplier, ForceMode.Force);

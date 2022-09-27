@@ -11612,7 +11612,7 @@ GameObject:
   - component: {fileID: 241886744}
   - component: {fileID: 241886743}
   - component: {fileID: 241886742}
-  m_Layer: 9
+  m_Layer: 6
   m_Name: Wall (6)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -12596,7 +12596,7 @@ GameObject:
   - component: {fileID: 264334094}
   - component: {fileID: 264334093}
   - component: {fileID: 264334092}
-  m_Layer: 9
+  m_Layer: 6
   m_Name: Wall (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -20698,7 +20698,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 64
   climbSpeed: 10
-  maxClimbTime: 0.75
+  maxClimbTime: 0.7
   detectionLength: 0.7
   sphereCastRadius: 0.25
   maxWallLookAngle: 30
@@ -53566,7 +53566,7 @@ GameObject:
   - component: {fileID: 1347254612}
   - component: {fileID: 1347254611}
   - component: {fileID: 1347254610}
-  m_Layer: 9
+  m_Layer: 6
   m_Name: Wall (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -59511,6 +59511,10 @@ PrefabInstance:
       propertyPath: normalCamera
       value: 
       objectReference: {fileID: 628012175}
+    - target: {fileID: 5960618236324691724, guid: cbf9daba979028242b688453a8eeec0c, type: 3}
+      propertyPath: groundLayer.m_Bits
+      value: 72
+      objectReference: {fileID: 0}
     - target: {fileID: 5960618236324691725, guid: cbf9daba979028242b688453a8eeec0c, type: 3}
       propertyPath: normalCamera
       value: 
@@ -59518,6 +59522,10 @@ PrefabInstance:
     - target: {fileID: 5960618236324691830, guid: cbf9daba979028242b688453a8eeec0c, type: 3}
       propertyPath: m_Name
       value: Player
+      objectReference: {fileID: 0}
+    - target: {fileID: 5960618236324691831, guid: cbf9daba979028242b688453a8eeec0c, type: 3}
+      propertyPath: climbSpeed
+      value: 3
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: cbf9daba979028242b688453a8eeec0c, type: 3}
@@ -66885,7 +66893,7 @@ GameObject:
   - component: {fileID: 1755577981}
   - component: {fileID: 1755577980}
   - component: {fileID: 1755577979}
-  m_Layer: 9
+  m_Layer: 6
   m_Name: Wall (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -88804,7 +88812,7 @@ GameObject:
   - component: {fileID: 2030761926}
   - component: {fileID: 2030761925}
   - component: {fileID: 2030761924}
-  m_Layer: 3
+  m_Layer: 6
   m_Name: Wall (7)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -91952,7 +91960,7 @@ GameObject:
   - component: {fileID: 2081920799}
   - component: {fileID: 2081920798}
   - component: {fileID: 2081920797}
-  m_Layer: 9
+  m_Layer: 6
   m_Name: Wall (8)
   m_TagString: Untagged
   m_Icon: {fileID: 0}

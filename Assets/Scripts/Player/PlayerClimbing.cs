@@ -19,14 +19,29 @@ namespace NoStackDev.BigMoney
 
         private bool climbing;
 
+        [Header("Climb Jumping")]
+        [SerializeField] private float climbJumpUpForce;
+        [SerializeField] private float climbJumpBackForce;
+        [SerializeField] private int climbJumps;
+        private int climbJumpsLeft;
+
         [Header("Detection")]
         [SerializeField] private float detectionLength;
         [SerializeField] private float sphereCastRadius;
         [SerializeField] private float maxWallLookAngle;
+        [SerializeField] private float minWallNormalAngleChange;
         private float wallLookAngle;
+
+        [Header("Exiting")]
+        [SerializeField] private bool exitingWall;
+        [SerializeField] private float exitWallTime;
+        private float exitWallTimer;
 
         private RaycastHit frontWallHit;
         private bool wallFront;
+
+        private Transform lastWall;
+        private Vector3 lastWallNormal;
 
         private void Awake()
         {
@@ -41,12 +56,12 @@ namespace NoStackDev.BigMoney
             WallCheck();
             StateMachine();
 
-            if (climbing) ClimbingMovement();
+            if (climbing && !exitingWall) ClimbingMovement();
         }
 
         private void StateMachine()
         {
-            if (wallFront && inputManager.movementInput.y > 0 && wallLookAngle < maxWallLookAngle)
+            if (wallFront && inputManager.movementInput.y > 0 && wallLookAngle < maxWallLookAngle && !exitingWall)
             {
                 if (!climbing && climbTimer > 0) StartClimbing();
 
@@ -54,12 +69,26 @@ namespace NoStackDev.BigMoney
                 if (climbTimer > 0) climbTimer -= Time.deltaTime;
                 if (climbTimer < 0) StopClimbing();
             }
+            // State 2 - exiting
+            else if (exitingWall)
+            {
+                if (climbing) StopClimbing();
+
+                if (exitWallTimer > 0) exitWallTimer -= Time.deltaTime;
+                if (exitWallTimer < 0)
+                {
+                    playerMovement.isExitingWallClimb = false;
+                    exitingWall = false;
+                }
+            }
 
             // State 3 - none
             else
             {
                 if (climbing) StopClimbing();
             }
+
+            if (wallFront && inputManager.wallJumpInput && climbJumpsLeft > 0) ClimbJump();
         }
 
         private void WallCheck()
@@ -67,9 +96,12 @@ namespace NoStackDev.BigMoney
             wallFront = Physics.SphereCast(transform.position, sphereCastRadius, orientation.forward, out frontWallHit, detectionLength, whatIsWall);
             wallLookAngle = Vector3.Angle(orientation.forward, -frontWallHit.normal);
 
-            if (groundDetection.isGrounded)
+            bool newWall = frontWallHit.transform != lastWall || Mathf.Abs(Vector3.Angle(lastWallNormal, frontWallHit.normal)) > minWallNormalAngleChange;
+
+            if ((wallFront && newWall) || groundDetection.isGrounded)
             {
                 climbTimer = maxClimbTime;
+                climbJumpsLeft = climbJumps;
             }
         }
         
@@ -77,6 +109,9 @@ namespace NoStackDev.BigMoney
         {
             climbing = true;
             playerMovement.isClimbing = true;
+
+            lastWall = frontWallHit.transform;
+            lastWallNormal = frontWallHit.normal;
         }
 
         private void ClimbingMovement()
@@ -88,6 +123,20 @@ namespace NoStackDev.BigMoney
         {
             climbing = false;
             playerMovement.isClimbing = false;
+        }
+
+        private void ClimbJump()
+        {
+            playerMovement.isExitingWallClimb = true;
+            exitingWall = true;
+            exitWallTimer = exitWallTime;
+
+            Vector3 forceToApply = transform.up * climbJumpUpForce + frontWallHit.normal * climbJumpBackForce;
+
+            rb.velocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
+            rb.AddForce(forceToApply, ForceMode.Impulse);
+
+            climbJumpsLeft--;
         }
     }
 }
